@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 15
+REVISION = 16
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -151,8 +151,11 @@ except FileNotFoundError:
 if args.outfile_name:
     args.outfile_name = os.path.join(orig_path, args.outfile_name)
 else:
-    basename = re.sub(r"\.json$", "", args.infile_name)
-    args.outfile_name = os.path.join(orig_path, basename) + ".zip"
+    outfile_basename = re.sub(
+        r"\.json$", "",
+        os.path.basename(args.infile_name)
+    )
+    args.outfile_name = os.path.join(orig_path, outfile_basename) + ".zip"
 
 # Do the job.
 with ZipFile(args.outfile_name, 'w') as outfile:
