@@ -9,7 +9,7 @@ import time
 import zipfile
 
 
-REVISION = 20
+REVISION = 21
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -146,6 +146,14 @@ def parse_args():
         help='Only print which files would be backed up.'
     )
 
+    parser.add_argument(
+        '--ignore-missing', '-i',
+        dest="ignore_missing",
+        default=False,
+        action='store_true',
+        help='Don’t abort the backup when files are missing.'
+    )
+
     return parser.parse_args()
 
 
@@ -158,10 +166,11 @@ class ZipFile (zipfile.ZipFile):
     file to disk.
     """
 
-    def __init__(self, *args, dry_run=False, **kwargs):
+    def __init__(self, *args, dry_run=False, ignore_missing=False, **kwargs):
 
         self.dry_run = dry_run
         self.stored_files = set()
+        self.ignore_missing = ignore_missing
 
         if not self.dry_run:
             super(ZipFile, self).__init__(*args, **kwargs)
@@ -183,7 +192,7 @@ class ZipFile (zipfile.ZipFile):
 
         if not self.dry_run:
             super(ZipFile, self).write(filename, *args, **kwargs)
-        elif not os.path.isfile(filename):
+        elif not (os.path.isfile(filename) or self.ignore_missing):
             raise FileNotFoundError
 
         self.stored_files.add(filename)
@@ -219,7 +228,9 @@ if __name__ == "__main__":
         args.outfile_name = os.path.join(orig_path, outfile_basename) + ".zip"
 
     # Do the job.
-    with ZipFile(args.outfile_name, 'w', dry_run=args.dry_run) as outfile:
+    with ZipFile(args.outfile_name, 'w',
+                 dry_run=args.dry_run,
+                 ignore_missing=args.ignore_missing) as outfile:
 
         for path, url in urls:
 

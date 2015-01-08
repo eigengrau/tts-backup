@@ -31,8 +31,9 @@ Usage flags and arguments are as follows:
 
 ::
 
-    usage: tts-backup.py [-h] [--gamedata PATH] [--outname FILENAME] [--dry-run]
-                         FILENAME
+    usage: tts-backup [-h] [--gamedata PATH] [--outname FILENAME] [--dry-run]
+                      [--ignore-missing]
+                      FILENAME
 
     Back-up locally cached content from a TTS .json file.
 
@@ -45,3 +46,4 @@ Usage flags and arguments are as follows:
       --outname FILENAME, -o FILENAME
                             The name for the output archive.
       --dry-run, -n         Only print which files would be backed up.
+      --ignore-missing, -i  Don’t abort the backup when files are missing.
