@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 11
+REVISION = 12
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -137,7 +137,8 @@ data_path = args.gamedata_dir
 os.chdir(data_path)
 
 # Do the job.
-outfile_name = os.path.join(orig_path, args.infile_name) + ".zip"
+basename = re.sub(r"\.json$", "", args.infile_name)
+outfile_name = os.path.join(orig_path, basename) + ".zip"
 with ZipFile(outfile_name, 'w') as outfile:
 
     for path, url in urls:
