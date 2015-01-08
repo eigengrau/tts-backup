@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 9
+REVISION = 10
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -83,8 +83,7 @@ def get_fs_path(path, url):
         return os.path.join(OBJPATH, filename)
 
     elif is_image(path, url):
-        # This assumes even PNGs are stored with a JPG suffix. I don’t
-        # have any PNGs cached, so I cannot confirm.
+        # Evenn PNGs are stored with .jpg suffix by TTS.
         filename = recoded_name + ".jpg"
         return os.path.join(IMGPATH, filename)
 
