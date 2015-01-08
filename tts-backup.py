@@ -6,11 +6,10 @@ import re
 import os
 import sys
 import time
+import zipfile
 
-from zipfile import ZipFile
 
-
-REVISION = 18
+REVISION = 19
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -150,17 +149,42 @@ def parse_args():
     return parser.parse_args()
 
 
-# Used in dry-runs.
-class DummyZip:
+class ZipFile (zipfile.ZipFile):
+    """A ZipFile that supports dry-runs.
 
-    def __enter__(self):
-        return self
+    It also keeps track of files already written, and only writes them
+    once. ZipFile.filelist would have been useful for this, but on
+    Windows, this doesn’t seem to reflect writes before syncing the
+    file to disk.
+    """
+
+    def __init__(self, *args, dry_run=False, **kwargs):
+
+        self.dry_run = dry_run
+        self.stored_files = set()
+
+        if not self.dry_run:
+            super(ZipFile, self).__init__(*args, **kwargs)
 
     def __exit__(self, *args, **kwargs):
-        return
 
-    def write(self, *args, **kwargs):
-        return
+        if not self.dry_run:
+            super(ZipFile, self).__exit__(*args, **kwargs)
+
+    def write(self, filename, *args, **kwargs):
+
+        if filename in self.stored_files:
+            return
+
+        # Logging.
+        curdir = os.getcwd()
+        absname = os.path.join(curdir, filename)
+        print(absname)
+
+        if not self.dry_run:
+            super(ZipFile, self).write(filename, *args, **kwargs)
+
+        self.stored_files.add(filename)
 
 
 if __name__ == "__main__":
@@ -193,29 +217,18 @@ if __name__ == "__main__":
         args.outfile_name = os.path.join(orig_path, outfile_basename) + ".zip"
 
     # Do the job.
-    stored_files = set()
-    zip_context = (ZipFile(args.outfile_name, 'w')
-                   if not args.dry_run
-                   else DummyZip())
-    with zip_context as outfile:
+    with ZipFile(args.outfile_name, 'w', dry_run=args.dry_run) as outfile:
 
         for path, url in urls:
 
             filename = get_fs_path(path, url)
+            try:
+                outfile.write(filename)
 
-            if not (os.path.isfile(filename) or args.dry_run):
+            except FileNotFoundError:
                 print("File not found:", filename)
                 print("Aborting. Zip file is incomplete.")
                 sys.exit(1)
-
-            # Some files might be referred to multiple times in the save
-            # game. Only store them once.
-            if filename not in stored_files:
-                stored_files.add(filename)
-                outfile.write(filename)
-                print(filename)
-
-        print()
 
         # Finally, include the save file itself.
         orig_json = os.path.join(orig_path, args.infile_name)
