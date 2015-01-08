@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 13
+REVISION = 14
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -139,9 +139,13 @@ except FileNotFoundError:
 urls = seekURL(save)
 
 # Change working dir, since get_fs_path gives us a relative path.
-orig_path = os.getcwd()
-data_path = args.gamedata_dir
-os.chdir(data_path)
+try:
+    orig_path = os.getcwd()
+    data_path = args.gamedata_dir
+    os.chdir(data_path)
+except FileNotFoundError:
+    print("Gamedata directory not found: %s" % args.gamedata_dir)
+    sys.exit(1)
 
 # We also need to correct the the destination path now.
 if args.outfile_name:
