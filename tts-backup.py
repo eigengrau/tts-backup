@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 from io import StringIO
 
-REVISION = 6
+REVISION = 7
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -98,7 +98,7 @@ def put_manifest(zipfile):
     }
 
     manifest = json.dumps(manifest)
-    zipfile.writestr("MANIFEST", manifest)
+    zipfile.comment = manifest.encode("utf-8")
 
 # Parse command-line.
 parser = argparse.ArgumentParser(description='Back-up locally cached content '
