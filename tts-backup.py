@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 10
+REVISION = 11
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -152,7 +152,7 @@ with ZipFile(outfile_name, 'w') as outfile:
         # Some files might be referred to multiple times in the save
         # game. Only store them once.
         if filename not in outfile.namelist():
-            print("..", filename)
+            print(filename)
             outfile.write(filename)
 
     print()
