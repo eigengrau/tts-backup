@@ -9,7 +9,7 @@ import time
 import zipfile
 
 
-REVISION = 19
+REVISION = 20
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -183,6 +183,8 @@ class ZipFile (zipfile.ZipFile):
 
         if not self.dry_run:
             super(ZipFile, self).write(filename, *args, **kwargs)
+        elif not os.path.isfile(filename):
+            raise FileNotFoundError
 
         self.stored_files.add(filename)
 
