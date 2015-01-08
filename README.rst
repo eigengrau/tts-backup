@@ -11,7 +11,9 @@ This only handles saves and mods in JSON format.
 Requirements
 ------------
 
-A Python 3 interpreter is required.
+A Python 3 interpreter is required. For Windows users, the
+`ActivePython <http://www.activestate.com/activepython/downloads>`__
+distribution is recommended.
 
 
 Usage
