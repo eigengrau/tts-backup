@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 16
+REVISION = 17
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -103,85 +103,99 @@ def put_metadata(zipfile):
     manifest = json.dumps(manifest)
     zipfile.comment = manifest.encode("utf-8")
 
-# Parse command-line.
-parser = argparse.ArgumentParser(
-    description='Back-up locally cached content from a TTS .json file.'
-)
-parser.add_argument(
-    'infile_name',
-    metavar="FILENAME",
-    help='The save file or mod in JSON format.'
-)
-parser.add_argument(
-    '--gamedata',
-    dest="gamedata_dir",
-    metavar="PATH",
-    default=GAMEDATA_DEFAULT,
-    help='The path to the TTS game data directory.'
-)
-parser.add_argument(
-    '--outname', '-o',
-    dest="outfile_name",
-    metavar="FILENAME",
-    default=None,
-    help='The name for the output archive.'
-)
-args = parser.parse_args()
 
-# Load save game.
-try:
+def urls_from_save(filename):
+
     infile = open(args.infile_name, "r")
     save = json.load(infile)
-except FileNotFoundError:
-    print("File not found: %s" % args.infile_name)
-    sys.exit(1)
+    return seekURL(save)
 
-urls = seekURL(save)
 
-# Change working dir, since get_fs_path gives us a relative path.
-try:
-    orig_path = os.getcwd()
-    data_path = args.gamedata_dir
-    os.chdir(data_path)
-except FileNotFoundError:
-    print("Gamedata directory not found: %s" % args.gamedata_dir)
-    sys.exit(1)
+def parse_args():
 
-# We also need to correct the the destination path now.
-if args.outfile_name:
-    args.outfile_name = os.path.join(orig_path, args.outfile_name)
-else:
-    outfile_basename = re.sub(
-        r"\.json$", "",
-        os.path.basename(args.infile_name)
+    parser = argparse.ArgumentParser(
+        description='Back-up locally cached content from a TTS .json file.'
     )
-    args.outfile_name = os.path.join(orig_path, outfile_basename) + ".zip"
 
-# Do the job.
-with ZipFile(args.outfile_name, 'w') as outfile:
+    parser.add_argument(
+        'infile_name',
+        metavar="FILENAME",
+        help='The save file or mod in JSON format.'
+    )
 
-    for path, url in urls:
+    parser.add_argument(
+        '--gamedata',
+        dest="gamedata_dir",
+        metavar="PATH",
+        default=GAMEDATA_DEFAULT,
+        help='The path to the TTS game data directory.'
+    )
 
-        filename = get_fs_path(path, url)
+    parser.add_argument(
+        '--outname', '-o',
+        dest="outfile_name",
+        metavar="FILENAME",
+        default=None,
+        help='The name for the output archive.'
+    )
 
-        if not os.path.isfile(filename):
-            print("File not found:", filename)
-            print("Aborting. Zip file is incomplete.")
-            sys.exit(1)
+    return parser.parse_args()
 
-        # Some files might be referred to multiple times in the save
-        # game. Only store them once.
-        if filename not in outfile.namelist():
-            print(filename)
-            outfile.write(filename)
 
-    print()
+if __name__ == "__main__":
 
-    # Finally, include the save file itself.
-    orig_json = os.path.join(orig_path, args.infile_name)
-    outfile.write(orig_json, os.path.basename(args.infile_name))
+    args = parse_args()
 
-    # Store some metadata.
-    put_metadata(outfile)
+    try:
+        urls = urls_from_save(args.infile_name)
+    except FileNotFoundError:
+        print("File not found: %s" % args.infile_name)
+        sys.exit(1)
 
-print("All done. Backed-up contents found in", args.outfile_name)
+    # Change working dir, since get_fs_path gives us a relative path.
+    try:
+        orig_path = os.getcwd()
+        data_path = args.gamedata_dir
+        os.chdir(data_path)
+    except FileNotFoundError:
+        print("Gamedata directory not found: %s" % args.gamedata_dir)
+        sys.exit(1)
+
+    # We also need to correct the the destination path now.
+    if args.outfile_name:
+        args.outfile_name = os.path.join(orig_path, args.outfile_name)
+    else:
+        outfile_basename = re.sub(
+            r"\.json$", "",
+            os.path.basename(args.infile_name)
+        )
+        args.outfile_name = os.path.join(orig_path, outfile_basename) + ".zip"
+
+    # Do the job.
+    with ZipFile(args.outfile_name, 'w') as outfile:
+
+        for path, url in urls:
+
+            filename = get_fs_path(path, url)
+
+            if not os.path.isfile(filename):
+                print("File not found:", filename)
+                print("Aborting. Zip file is incomplete.")
+                sys.exit(1)
+
+            # Some files might be referred to multiple times in the save
+            # game. Only store them once.
+            if filename not in outfile.namelist():
+                print(filename)
+                outfile.write(filename)
+
+        print()
+
+        # Finally, include the save file itself.
+        orig_json = os.path.join(orig_path, args.infile_name)
+        outfile.write(orig_json, os.path.basename(args.infile_name))
+
+        # Store some metadata.
+        put_metadata(outfile)
+
+    print("All done. Backed-up contents found in", args.outfile_name)
