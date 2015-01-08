@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 14
+REVISION = 15
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -176,7 +176,7 @@ with ZipFile(args.outfile_name, 'w') as outfile:
 
     # Finally, include the save file itself.
     orig_json = os.path.join(orig_path, args.infile_name)
-    outfile.write(orig_json, args.infile_name)
+    outfile.write(orig_json, os.path.basename(args.infile_name))
 
     # Store some metadata.
     put_metadata(outfile)
