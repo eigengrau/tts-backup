@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 17
+REVISION = 18
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -139,7 +139,28 @@ def parse_args():
         help='The name for the output archive.'
     )
 
+    parser.add_argument(
+        '--dry-run', '-n',
+        dest="dry_run",
+        default=False,
+        action='store_true',
+        help='Only print which files would be backed up.'
+    )
+
     return parser.parse_args()
+
+
+# Used in dry-runs.
+class DummyZip:
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args, **kwargs):
+        return
+
+    def write(self, *args, **kwargs):
+        return
 
 
 if __name__ == "__main__":
@@ -172,22 +193,27 @@ if __name__ == "__main__":
         args.outfile_name = os.path.join(orig_path, outfile_basename) + ".zip"
 
     # Do the job.
-    with ZipFile(args.outfile_name, 'w') as outfile:
+    stored_files = set()
+    zip_context = (ZipFile(args.outfile_name, 'w')
+                   if not args.dry_run
+                   else DummyZip())
+    with zip_context as outfile:
 
         for path, url in urls:
 
             filename = get_fs_path(path, url)
 
-            if not os.path.isfile(filename):
+            if not (os.path.isfile(filename) or args.dry_run):
                 print("File not found:", filename)
                 print("Aborting. Zip file is incomplete.")
                 sys.exit(1)
 
             # Some files might be referred to multiple times in the save
             # game. Only store them once.
-            if filename not in outfile.namelist():
-                print(filename)
+            if filename not in stored_files:
+                stored_files.add(filename)
                 outfile.write(filename)
+                print(filename)
 
         print()
 
@@ -198,4 +224,5 @@ if __name__ == "__main__":
         # Store some metadata.
         put_metadata(outfile)
 
-    print("All done. Backed-up contents found in", args.outfile_name)
+    if not args.dry_run:
+        print("All done. Backed-up contents found in", args.outfile_name)
