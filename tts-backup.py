@@ -8,9 +8,9 @@ import sys
 import time
 
 from zipfile import ZipFile
-from io import StringIO
 
-REVISION = 8
+
+REVISION = 9
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -93,7 +93,7 @@ def get_fs_path(path, url):
                          (url, path))
 
 
-def put_manifest(zipfile):
+def put_metadata(zipfile):
     """Create a MANIFEST file and store it within the archive."""
 
     manifest = {
@@ -105,13 +105,21 @@ def put_manifest(zipfile):
     zipfile.comment = manifest.encode("utf-8")
 
 # Parse command-line.
-parser = argparse.ArgumentParser(description='Back-up locally cached content '
-                                             'from a TTS .json file.')
-parser.add_argument('infile_name', metavar="FILENAME",
-                    help='The save file or mod in JSON format.')
-parser.add_argument('--gamedata', dest="gamedata_dir", metavar="PATH",
-                    default=GAMEDATA_DEFAULT,
-                    help='The path to the TTS game data directory.')
+parser = argparse.ArgumentParser(
+    description='Back-up locally cached content from a TTS .json file.'
+)
+parser.add_argument(
+    'infile_name',
+    metavar="FILENAME",
+    help='The save file or mod in JSON format.'
+)
+parser.add_argument(
+    '--gamedata',
+    dest="gamedata_dir",
+    metavar="PATH",
+    default=GAMEDATA_DEFAULT,
+    help='The path to the TTS game data directory.'
+)
 args = parser.parse_args()
 
 # Load save game.
@@ -155,6 +163,6 @@ with ZipFile(outfile_name, 'w') as outfile:
     outfile.write(orig_json, args.infile_name)
 
     # Store some metadata.
-    put_manifest(outfile)
+    put_metadata(outfile)
 
 print("All done. Backed-up contents found in", outfile_name)
