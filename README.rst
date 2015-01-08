@@ -1,7 +1,7 @@
 TTS-Backup
 ==========
 
-TTS-Backp backs up Tabletop simulator save games and mods to a Zip
+TTS-Backup backs up Tabletop simulator save games and mods to a Zip
 file, bundling locally cached images and models within a single
 archive.
 
