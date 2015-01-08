@@ -10,7 +10,7 @@ import time
 from zipfile import ZipFile
 
 
-REVISION = 12
+REVISION = 13
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -119,6 +119,13 @@ parser.add_argument(
     default=GAMEDATA_DEFAULT,
     help='The path to the TTS game data directory.'
 )
+parser.add_argument(
+    '--outname', '-o',
+    dest="outfile_name",
+    metavar="FILENAME",
+    default=None,
+    help='The name for the output archive.'
+)
 args = parser.parse_args()
 
 # Load save game.
@@ -136,10 +143,15 @@ orig_path = os.getcwd()
 data_path = args.gamedata_dir
 os.chdir(data_path)
 
+# We also need to correct the the destination path now.
+if args.outfile_name:
+    args.outfile_name = os.path.join(orig_path, args.outfile_name)
+else:
+    basename = re.sub(r"\.json$", "", args.infile_name)
+    args.outfile_name = os.path.join(orig_path, basename) + ".zip"
+
 # Do the job.
-basename = re.sub(r"\.json$", "", args.infile_name)
-outfile_name = os.path.join(orig_path, basename) + ".zip"
-with ZipFile(outfile_name, 'w') as outfile:
+with ZipFile(args.outfile_name, 'w') as outfile:
 
     for path, url in urls:
 
@@ -165,4 +177,4 @@ with ZipFile(outfile_name, 'w') as outfile:
     # Store some metadata.
     put_metadata(outfile)
 
-print("All done. Backed-up contents found in", outfile_name)
+print("All done. Backed-up contents found in", args.outfile_name)
