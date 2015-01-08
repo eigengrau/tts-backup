@@ -10,10 +10,14 @@ import time
 from zipfile import ZipFile
 from io import StringIO
 
-REVISION = 7
+REVISION = 8
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
+
+GAMEDATA_DEFAULT = os.path.expanduser(
+    "~/Documents/My Games/Tabletop Simulator"
+)
 
 
 def seekURL(dic, trail=[]):
@@ -105,6 +109,9 @@ parser = argparse.ArgumentParser(description='Back-up locally cached content '
                                              'from a TTS .json file.')
 parser.add_argument('infile_name', metavar="FILENAME",
                     help='The save file or mod in JSON format.')
+parser.add_argument('--gamedata', dest="gamedata_dir", metavar="PATH",
+                    default=GAMEDATA_DEFAULT,
+                    help='The path to the TTS game data directory.')
 args = parser.parse_args()
 
 # Load save game.
@@ -119,7 +126,7 @@ urls = seekURL(save)
 
 # Change working dir, since get_fs_path gives us a relative path.
 orig_path = os.getcwd()
-data_path = os.path.expanduser("~/Documents/My Games/Tabletop Simulator")
+data_path = args.gamedata_dir
 os.chdir(data_path)
 
 # Do the job.
