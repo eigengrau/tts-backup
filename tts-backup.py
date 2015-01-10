@@ -9,7 +9,7 @@ import time
 import zipfile
 
 
-REVISION = 23
+REVISION = 24
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -108,7 +108,7 @@ def put_metadata(zipfile, comment=None):
 
 def urls_from_save(filename):
 
-    with open(args.infile_name, "r", encoding="utf-8") as infile:
+    with open(filename, "r", encoding="utf-8") as infile:
         save = json.load(infile)
     return seekURL(save)
 
