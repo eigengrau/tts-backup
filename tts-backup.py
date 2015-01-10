@@ -9,7 +9,7 @@ import time
 import zipfile
 
 
-REVISION = 22
+REVISION = 23
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -91,13 +91,16 @@ def get_fs_path(path, url):
                          (url, path))
 
 
-def put_metadata(zipfile):
+def put_metadata(zipfile, comment=None):
     """Create a MANIFEST file and store it within the archive."""
 
     manifest = {
         "script_revision": REVISION,
         "export_date":  round(time.time())
     }
+
+    if comment:
+        manifest['comment'] = comment
 
     manifest = json.dumps(manifest)
     zipfile.comment = manifest.encode("utf-8")
@@ -152,6 +155,13 @@ def parse_args():
         default=False,
         action='store_true',
         help='Don’t abort the backup when files are missing.'
+    )
+
+    parser.add_argument(
+        '--comment', '-c',
+        dest="comment",
+        default="",
+        help='A comment to be stored in the resulting Zip.'
     )
 
     return parser.parse_args()
@@ -248,7 +258,7 @@ if __name__ == "__main__":
         outfile.write(orig_json, os.path.basename(args.infile_name))
 
         # Store some metadata.
-        put_metadata(outfile)
+        put_metadata(outfile, comment=args.comment)
 
     if not args.dry_run:
         print("All done. Backed-up contents found in", args.outfile_name)

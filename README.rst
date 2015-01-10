@@ -32,7 +32,7 @@ Usage flags and arguments are as follows:
 ::
 
     usage: tts-backup [-h] [--gamedata PATH] [--outname FILENAME] [--dry-run]
-                      [--ignore-missing]
+                      [--ignore-missing] [--comment COMMENT]
                       FILENAME
 
     Back-up locally cached content from a TTS .json file.
@@ -47,3 +47,5 @@ Usage flags and arguments are as follows:
                             The name for the output archive.
       --dry-run, -n         Only print which files would be backed up.
       --ignore-missing, -i  Don’t abort the backup when files are missing.
+      --comment COMMENT, -c COMMENT
+                            A comment to be stored in the resulting Zip.
