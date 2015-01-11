@@ -9,7 +9,7 @@ import time
 import zipfile
 
 
-REVISION = 24
+REVISION = 25
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
@@ -89,21 +89,6 @@ def get_fs_path(path, url):
     else:
         raise ValueError("Don’t know how to generate path for URL %s at %s." %
                          (url, path))
-
-
-def put_metadata(zipfile, comment=None):
-    """Create a MANIFEST file and store it within the archive."""
-
-    manifest = {
-        "script_revision": REVISION,
-        "export_date":  round(time.time())
-    }
-
-    if comment:
-        manifest['comment'] = comment
-
-    manifest = json.dumps(manifest)
-    zipfile.comment = manifest.encode("utf-8")
 
 
 def urls_from_save(filename):
@@ -207,6 +192,20 @@ class ZipFile (zipfile.ZipFile):
 
         self.stored_files.add(filename)
 
+    def put_metadata(self, comment=None):
+        """Create a MANIFEST file and store it within the archive."""
+
+        manifest = {
+            "script_revision": REVISION,
+            "export_date":  round(time.time())
+        }
+
+        if comment:
+            manifest['comment'] = comment
+
+        manifest = json.dumps(manifest)
+        self.comment = manifest.encode("utf-8")
+
 
 if __name__ == "__main__":
 
@@ -258,7 +257,7 @@ if __name__ == "__main__":
         outfile.write(orig_json, os.path.basename(args.infile_name))
 
         # Store some metadata.
-        put_metadata(outfile, comment=args.comment)
+        outfile.put_metadata(comment=args.comment)
 
     if not args.dry_run:
         print("All done. Backed-up contents found in", args.outfile_name)
