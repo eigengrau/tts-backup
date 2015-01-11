@@ -5,6 +5,7 @@ import os
 import sys
 import urllib.request
 import urllib.error
+import urllib.parse
 import signal
 
 from libtts import (urls_from_save,
@@ -76,7 +77,7 @@ if __name__ == "__main__":
 
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
-        if not url.startswith("http"):
+        if not urllib.parse.urlparse(url).scheme:
             fetch_url = "http://" + url
         else:
             fetch_url = url
