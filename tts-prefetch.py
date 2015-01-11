@@ -60,6 +60,14 @@ def parse_args():
         help="Don’t abort when encountering an unexpected MIME type."
     )
 
+    parser.add_argument(
+        '--timeout', '-t',
+        dest="timeout",
+        default=5,
+        type=int,
+        help="Connection timeout in s."
+    )
+
     return parser.parse_args()
 
 
@@ -71,7 +79,8 @@ def prefetch_file(filename,
                   refetch=False,
                   ignore_content_type=False,
                   dry_run=False,
-                  gamedata_dir=GAMEDATA_DEFAULT):
+                  gamedata_dir=GAMEDATA_DEFAULT,
+                  timeout=5):
 
     print("Prefetching assets for %s." % filename)
 
@@ -118,7 +127,7 @@ def prefetch_file(filename,
             continue
 
         try:
-            response = urllib.request.urlopen(fetch_url, timeout=5)
+            response = urllib.request.urlopen(fetch_url, timeout=timeout)
         except urllib.error.HTTPError as error:
             print("Error %s (%s)" % (error.code, error.reason))
             continue
@@ -158,4 +167,5 @@ if __name__ == "__main__":
                       dry_run=args.dry_run,
                       refetch=args.refetch,
                       ignore_content_type=args.ignore_content_type,
-                      gamedata_dir=args.gamedata_dir)
+                      gamedata_dir=args.gamedata_dir,
+                      timeout=args.timeout)
