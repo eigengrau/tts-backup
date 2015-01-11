@@ -130,7 +130,10 @@ if __name__ == "__main__":
             print("ok")
         except:
             # Don’t leave files with partial content lying around.
-            os.remove(outfile_name)
+            try:
+                os.remove(outfile_name)
+            except FileNotFoundError:
+                pass
             raise
 
         done.add(url)
