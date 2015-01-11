@@ -22,8 +22,9 @@ def parse_args():
     )
 
     parser.add_argument(
-        'infile_name',
+        'infile_names',
         metavar="FILENAME",
+        nargs='+',
         help='The save file or mod in JSON format.'
     )
 
@@ -66,14 +67,16 @@ def sigint_handler(signum, frame):
     sys.exit(1)
 
 
-if __name__ == "__main__":
+def prefetch_file(filename,
+                  refetch=False,
+                  ignore_content_type=False,
+                  dry_run=False,
+                  gamedata_dir=GAMEDATA_DEFAULT):
 
-    signal.signal(signal.SIGINT, sigint_handler)
-
-    args = parse_args()
+    print("Prefetching assets for %s." % filename)
 
     done = set()
-    for path, url in urls_from_save(args.infile_name):
+    for path, url in urls_from_save(filename):
 
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
@@ -99,17 +102,17 @@ if __name__ == "__main__":
             raise ValueError("Don’t know how to retrieve URL %s at %s." %
                              (url, path))
 
-        outfile_name = os.path.join(args.gamedata_dir, get_fs_path(path, url))
+        outfile_name = os.path.join(gamedata_dir, get_fs_path(path, url))
 
         # Check if the object is already cached.
-        if os.path.isfile(outfile_name) and not args.refetch:
+        if os.path.isfile(outfile_name) and not refetch:
             done.add(url)
             continue
 
         print("%s: " % url, end="")
         sys.stdout.flush()
 
-        if args.dry_run:
+        if dry_run:
             print("dry run")
             done.add(url)
             continue
@@ -124,7 +127,7 @@ if __name__ == "__main__":
             continue
 
         content_type = response.getheader('Content-Type').strip()
-        if not (content_expected(content_type) or args.ignore_content_type):
+        if not (content_expected(content_type) or ignore_content_type):
             print("Content type %s doesn’t match expected type." %
                   content_type)
             sys.exit(1)
@@ -142,3 +145,17 @@ if __name__ == "__main__":
             raise
 
         done.add(url)
+
+
+if __name__ == "__main__":
+
+    signal.signal(signal.SIGINT, sigint_handler)
+
+    args = parse_args()
+    for infile_name in args.infile_names:
+
+        prefetch_file(infile_name,
+                      dry_run=args.dry_run,
+                      refetch=args.refetch,
+                      ignore_content_type=args.ignore_content_type,
+                      gamedata_dir=args.gamedata_dir)
