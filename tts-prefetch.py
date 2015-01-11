@@ -78,6 +78,8 @@ if __name__ == "__main__":
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
         if not urllib.parse.urlparse(url).scheme:
+            print("Warning: URL %s doesn’t specify a URL scheme. "
+                  "Assuming http." % url)
             fetch_url = "http://" + url
         else:
             fetch_url = url
