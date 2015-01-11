@@ -15,7 +15,7 @@ A Python 3 interpreter is required. For Windows users, the
 `ActivePython <http://www.activestate.com/activepython/downloads>`__
 distribution is recommended.
 
-To install, simply copy all source files into a directory of you
+To install, simply copy all source files into a directory of your
 convenience.
 
 
