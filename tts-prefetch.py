@@ -115,9 +115,12 @@ if __name__ == "__main__":
             continue
 
         try:
-            response = urllib.request.urlopen(fetch_url)
+            response = urllib.request.urlopen(fetch_url, timeout=5)
         except urllib.error.HTTPError as error:
             print("Error %s (%s)" % (error.code, error.reason))
+            continue
+        except urllib.error.URLError as error:
+            print("Error (%s)" % error.reason)
             continue
 
         content_type = response.getheader('Content-Type').strip()
