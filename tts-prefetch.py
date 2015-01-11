@@ -77,7 +77,9 @@ if __name__ == "__main__":
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
         if not url.startswith("http"):
-            url = "http://" + url
+            fetch_url = "http://" + url
+        else:
+            fetch_url = url
 
         # A mod might refer to the same URL multiple times.
         if url in done:
@@ -110,7 +112,7 @@ if __name__ == "__main__":
             continue
 
         try:
-            response = urllib.request.urlopen(url)
+            response = urllib.request.urlopen(fetch_url)
         except urllib.error.HTTPError as error:
             print("Error %s (%s)" % (error.code, error.reason))
             continue
