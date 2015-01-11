@@ -94,7 +94,7 @@ Usage flags and arguments are as follows:
       -h, --help            show this help message and exit
       --gamedata PATH       The path to the TTS game data directory.
       --dry-run, -n         Only print which files would be downloaded.
-      --refetch, -r         Rewrite objects that already exists in the cache.
+      --refetch, -r         Rewrite objects that already exist in the cache.
       --relax, -x           Don’t abort when encountering an unexpected MIME type.
       --timeout TIMEOUT, -t TIMEOUT
                             Connection timeout in s.

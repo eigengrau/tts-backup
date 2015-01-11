@@ -49,7 +49,7 @@ def parse_args():
         dest="refetch",
         default=False,
         action='store_true',
-        help='Rewrite objects that already exists in the cache.'
+        help='Rewrite objects that already exist in the cache.'
     )
 
     parser.add_argument(
