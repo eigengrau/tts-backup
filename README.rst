@@ -15,6 +15,10 @@ A Python 3 interpreter is required. For Windows users, the
 `ActivePython <http://www.activestate.com/activepython/downloads>`__
 distribution is recommended.
 
+Alternatively, a binary release for the Windows platform is available
+`here
+<https://github.com/eigengrau/tts-backup/releases/tag/win32-frozen>`__.
+
 To install, simply copy all source files into a directory of your
 convenience.
 
