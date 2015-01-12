@@ -13,7 +13,7 @@ from libtts import (urls_from_save,
                     GAMEDATA_DEFAULT)
 
 
-REVISION = 26
+REVISION = 27
 
 
 def parse_args():
@@ -57,7 +57,7 @@ def parse_args():
         dest="ignore_missing",
         default=False,
         action='store_true',
-        help='Don’t abort the backup when files are missing.'
+        help='Do not abort the backup when files are missing.'
     )
 
     parser.add_argument(

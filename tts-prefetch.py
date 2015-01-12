@@ -57,7 +57,7 @@ def parse_args():
         dest="ignore_content_type",
         default=False,
         action='store_true',
-        help="Don’t abort when encountering an unexpected MIME type."
+        help="Do not abort when encountering an unexpected MIME type."
     )
 
     parser.add_argument(
@@ -90,7 +90,7 @@ def prefetch_file(filename,
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
         if not urllib.parse.urlparse(url).scheme:
-            print("Warning: URL %s doesn’t specify a URL scheme. "
+            print("Warning: URL %s does not specify a URL scheme. "
                   "Assuming http." % url)
             fetch_url = "http://" + url
         else:
@@ -108,7 +108,7 @@ def prefetch_file(filename,
             content_expected = lambda mime: mime in ("image/jpeg",
                                                      "image/png")
         else:
-            raise ValueError("Don’t know how to retrieve URL %s at %s." %
+            raise ValueError("Do not know how to retrieve URL %s at %s." %
                              (url, path))
 
         outfile_name = os.path.join(gamedata_dir, get_fs_path(path, url))
@@ -137,7 +137,7 @@ def prefetch_file(filename,
 
         content_type = response.getheader('Content-Type').strip()
         if not (content_expected(content_type) or ignore_content_type):
-            print("Content type %s doesn’t match expected type." %
+            print("Content type %s does not match expected type." %
                   content_type)
             sys.exit(1)
 
