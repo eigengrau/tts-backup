@@ -13,7 +13,7 @@ from libtts import (urls_from_save,
                     GAMEDATA_DEFAULT)
 
 
-REVISION = 27
+REVISION = 28
 
 
 def parse_args():
@@ -101,12 +101,25 @@ class ZipFile (zipfile.ZipFile):
         # Logging.
         curdir = os.getcwd()
         absname = os.path.join(curdir, filename)
-        print(absname)
+        log_skipped = lambda: print("%s (not found)" % absname)
+        log_written = lambda: print(absname)
 
-        if not self.dry_run:
-            super(ZipFile, self).write(filename, *args, **kwargs)
-        elif not (os.path.isfile(filename) or self.ignore_missing):
+        if not (os.path.isfile(filename) or self.ignore_missing):
             raise FileNotFoundError
+
+        if self.dry_run and os.path.isfile(filename):
+            log_written()
+
+        elif self.dry_run:
+            log_skipped()
+
+        else:
+            try:
+                super(ZipFile, self).write(filename, *args, **kwargs)
+                log_written()
+            except FileNotFoundError:
+                assert self.ignore_missing
+                log_skipped()
 
         self.stored_files.add(filename)
 
