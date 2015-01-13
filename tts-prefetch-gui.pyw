@@ -60,7 +60,7 @@ class GUI (Frame):
 
             ("infile",   FileEntry, {"label": "Input file",
                                      "initialdir": libtts.GAMEDATA_DEFAULT,
-                                     "filetypes": ["JSON-file {.json}"],
+                                     "filetypes": [("JSON-file", "*.json")],
                                      "action": "open",
                                      "default": self.args.infile}),
             ("gamedata", DirEntry,  {"label": "Gamedata path",
