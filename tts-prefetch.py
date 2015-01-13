@@ -152,6 +152,9 @@ def prefetch_file(filename,
             with open(outfile_name, "wb") as outfile:
                 outfile.write(response.read())
             print("ok")
+        except FileNotFoundError as error:
+            print("%s: %s" % (error.strerror, error.filename))
+            raise
         except:
             # Don’t leave files with partial content lying around.
             try:
