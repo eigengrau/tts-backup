@@ -184,8 +184,11 @@ def main(args):
         # Store some metadata.
         outfile.put_metadata(comment=args.comment)
 
-    if not args.dry_run:
-        print("All done. Backed-up contents found in", args.outfile_name)
+    if args.dry_run:
+        print("Dry run for %s completed." % args.infile_name)
+    else:
+        print("Backed-up contents for %s found in %s." %
+              (args.infile_name, args.outfile_name))
 
 
 if __name__ == "__main__":
