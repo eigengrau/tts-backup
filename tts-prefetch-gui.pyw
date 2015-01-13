@@ -44,6 +44,14 @@ class GUI (Frame):
 
         self.make_widgets()
 
+    def quit(self):
+
+        if self.running and self.running.is_alive():
+            self.stop()
+            self.after(300, self.quit)
+        else:
+            super().quit()
+
     def make_widgets(self):
 
         self.label = Label(self,
