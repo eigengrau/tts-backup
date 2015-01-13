@@ -110,7 +110,9 @@ def prefetch_file(filename,
         # To prevent downloading unexpected content, we check the MIME
         # type in the response.
         if is_obj(path, url):
-            content_expected = lambda mime: mime.startswith("text/plain")
+            content_expected = lambda mime: any(map(mime.startswith,
+                                                    ("text/plain",
+                                                     "application/json")))
         elif is_image(path, url):
             content_expected = lambda mime: mime in ("image/jpeg",
                                                      "image/png")
