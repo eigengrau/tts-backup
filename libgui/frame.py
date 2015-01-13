@@ -1,7 +1,6 @@
 import sys
 
 from tkinter import *
-#from tkinter.ttk import *
 
 
 class EntryFrame (LabelFrame):

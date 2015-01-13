@@ -51,7 +51,6 @@ class GUI (Frame):
         self.label.pack()
 
         leftpane = Frame(self)
-        leftpane.configure(bg="black")
 
         homedir = os.path.expanduser("~")
         self.settings = EntryFrame(
