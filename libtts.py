@@ -81,7 +81,7 @@ def get_fs_path(path, url):
         return os.path.join(IMGPATH, filename)
 
     else:
-        raise ValueError("Don’t know how to generate path for URL %s at %s." %
+        raise ValueError("Do not know how to generate path for URL %s at %s." %
                          (url, path))
 
 
