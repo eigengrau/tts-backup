@@ -127,8 +127,7 @@ def prefetch_file(filename,
             done.add(url)
             continue
 
-        print("%s: " % url, end="")
-        sys.stdout.flush()
+        print("%s: " % url, end="", flush=True)
 
         if dry_run:
             print("dry run")
