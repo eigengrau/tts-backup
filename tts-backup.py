@@ -82,12 +82,12 @@ class ZipFile (zipfile.ZipFile):
         self.ignore_missing = ignore_missing
 
         if not self.dry_run:
-            super(ZipFile, self).__init__(*args, **kwargs)
+            super().__init__(*args, **kwargs)
 
     def __exit__(self, *args, **kwargs):
 
         if not self.dry_run:
-            super(ZipFile, self).__exit__(*args, **kwargs)
+            super().__exit__(*args, **kwargs)
 
     def write(self, filename, *args, **kwargs):
 
@@ -111,7 +111,7 @@ class ZipFile (zipfile.ZipFile):
 
         else:
             try:
-                super(ZipFile, self).write(filename, *args, **kwargs)
+                super().write(filename, *args, **kwargs)
                 log_written()
             except FileNotFoundError:
                 assert self.ignore_missing
