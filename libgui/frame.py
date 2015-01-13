@@ -95,6 +95,7 @@ class StreamOutput (Text):
 
     def __exit__(self, *args):
 
+        self.flush()
         sys.stdout = self.stdout
         sys.stderr = self.stderr
 
