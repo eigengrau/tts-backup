@@ -148,7 +148,7 @@ def prefetch_file(filename,
         is_expected = content_expected(content_type)
         if not (is_expected or ignore_content_type):
             print("Error: Content type %s does not match expected type. "
-                  "Aborting." % content_type)
+                  "Aborting. Use --relax to ignore." % content_type)
             sys.exit(1)
 
         try:
