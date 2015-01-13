@@ -139,7 +139,8 @@ def main(args):
     try:
         urls = urls_from_save(args.infile_name)
     except FileNotFoundError:
-        print("File not found: %s" % args.infile_name)
+        print("File not found: %s" % args.infile_name,
+              file=sys.stderr)
         sys.exit(1)
 
     # Change working dir, since get_fs_path gives us a relative path.
@@ -148,7 +149,8 @@ def main(args):
         data_path = args.gamedata_dir
         os.chdir(data_path)
     except FileNotFoundError:
-        print("Gamedata directory not found: %s" % args.gamedata_dir)
+        print("Gamedata directory not found: %s" % args.gamedata_dir,
+              file=sys.stderr)
         sys.exit(1)
 
     # We also need to correct the the destination path now.
@@ -173,8 +175,10 @@ def main(args):
                 outfile.write(filename)
 
             except FileNotFoundError:
-                print("File not found:", filename)
-                print("Aborting. Zip file is incomplete.")
+                print("File not found: %s\nAborting.." % filename,
+                      file=sys.stderr)
+                if not args.dry_run:
+                    print("Zip file is incomplete.", file=sys.stderr)
                 sys.exit(1)
 
         # Finally, include the save file itself.
