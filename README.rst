@@ -34,6 +34,9 @@ respective assets once they are removed from the bag.
 By default, TTS-Backup will assume that cached data is located in
 ``~/Documents/My Games/Tabletop Simulator``.
 
+TTS-Backup is a console application. For stern opponents of the CLI, a
+minimal GUI is provided.
+
 Usage flags and arguments are as follows:
 
 ::
@@ -80,6 +83,9 @@ Usage
 
 By default, TTS-Prefetch will assume that cached data is located in
 ``~/Documents/My Games/Tabletop Simulator``.
+
+TTS-Prefetch is a console application. For stern opponents of the CLI,
+a minimal GUI is provided.
 
 Usage flags and arguments are as follows:
 
