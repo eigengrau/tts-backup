@@ -15,60 +15,56 @@ from libtts import (urls_from_save,
                     GAMEDATA_DEFAULT)
 
 
-def parse_args():
+parser = argparse.ArgumentParser(
+    description='Download assets referenced in TTS .json files.'
+)
 
-    parser = argparse.ArgumentParser(
-        description='Download assets referenced in TTS .json files.'
-    )
+parser.add_argument(
+    'infile_names',
+    metavar="FILENAME",
+    nargs='+',
+    help='The save file or mod in JSON format.'
+)
 
-    parser.add_argument(
-        'infile_names',
-        metavar="FILENAME",
-        nargs='+',
-        help='The save file or mod in JSON format.'
-    )
+parser.add_argument(
+    '--gamedata',
+    dest="gamedata_dir",
+    metavar="PATH",
+    default=GAMEDATA_DEFAULT,
+    help='The path to the TTS game data directory.'
+)
 
-    parser.add_argument(
-        '--gamedata',
-        dest="gamedata_dir",
-        metavar="PATH",
-        default=GAMEDATA_DEFAULT,
-        help='The path to the TTS game data directory.'
-    )
+parser.add_argument(
+    '--dry-run', '-n',
+    dest="dry_run",
+    default=False,
+    action='store_true',
+    help='Only print which files would be downloaded.'
+)
 
-    parser.add_argument(
-        '--dry-run', '-n',
-        dest="dry_run",
-        default=False,
-        action='store_true',
-        help='Only print which files would be downloaded.'
-    )
+parser.add_argument(
+    '--refetch', '-r',
+    dest="refetch",
+    default=False,
+    action='store_true',
+    help='Rewrite objects that already exist in the cache.'
+)
 
-    parser.add_argument(
-        '--refetch', '-r',
-        dest="refetch",
-        default=False,
-        action='store_true',
-        help='Rewrite objects that already exist in the cache.'
-    )
+parser.add_argument(
+    '--relax', '-x',
+    dest="ignore_content_type",
+    default=False,
+    action='store_true',
+    help="Do not abort when encountering an unexpected MIME type."
+)
 
-    parser.add_argument(
-        '--relax', '-x',
-        dest="ignore_content_type",
-        default=False,
-        action='store_true',
-        help="Do not abort when encountering an unexpected MIME type."
-    )
-
-    parser.add_argument(
-        '--timeout', '-t',
-        dest="timeout",
-        default=5,
-        type=int,
-        help="Connection timeout in s."
-    )
-
-    return parser.parse_args()
+parser.add_argument(
+    '--timeout', '-t',
+    dest="timeout",
+    default=5,
+    type=int,
+    help="Connection timeout in s."
+)
 
 
 def sigint_handler(signum, frame):
@@ -80,12 +76,17 @@ def prefetch_file(filename,
                   ignore_content_type=False,
                   dry_run=False,
                   gamedata_dir=GAMEDATA_DEFAULT,
-                  timeout=5):
+                  timeout=5,
+                  semaphore=None):
 
     print("Prefetching assets for %s." % filename)
 
     done = set()
     for path, url in urls_from_save(filename):
+
+        if semaphore and semaphore.acquire(blocking=False):
+            print("Aborted.")
+            return
 
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
@@ -156,11 +157,8 @@ def prefetch_file(filename,
         done.add(url)
 
 
-if __name__ == "__main__":
+def main(args, semaphore=None):
 
-    signal.signal(signal.SIGINT, sigint_handler)
-
-    args = parse_args()
     for infile_name in args.infile_names:
 
         prefetch_file(infile_name,
@@ -168,4 +166,12 @@ if __name__ == "__main__":
                       refetch=args.refetch,
                       ignore_content_type=args.ignore_content_type,
                       gamedata_dir=args.gamedata_dir,
-                      timeout=args.timeout)
+                      timeout=args.timeout,
+                      semaphore=semaphore)
+
+
+if __name__ == "__main__":
+
+    signal.signal(signal.SIGINT, sigint_handler)
+    args = parser.parse_args()
+    main(args)

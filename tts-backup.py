@@ -16,58 +16,54 @@ from libtts import (urls_from_save,
 REVISION = 28
 
 
-def parse_args():
+parser = argparse.ArgumentParser(
+    description='Back-up locally cached content from a TTS .json file.'
+)
 
-    parser = argparse.ArgumentParser(
-        description='Back-up locally cached content from a TTS .json file.'
-    )
+parser.add_argument(
+    'infile_name',
+    metavar="FILENAME",
+    help='The save file or mod in JSON format.'
+)
 
-    parser.add_argument(
-        'infile_name',
-        metavar="FILENAME",
-        help='The save file or mod in JSON format.'
-    )
+parser.add_argument(
+    '--gamedata',
+    dest="gamedata_dir",
+    metavar="PATH",
+    default=GAMEDATA_DEFAULT,
+    help='The path to the TTS game data directory.'
+)
 
-    parser.add_argument(
-        '--gamedata',
-        dest="gamedata_dir",
-        metavar="PATH",
-        default=GAMEDATA_DEFAULT,
-        help='The path to the TTS game data directory.'
-    )
+parser.add_argument(
+    '--outname', '-o',
+    dest="outfile_name",
+    metavar="FILENAME",
+    default=None,
+    help='The name for the output archive.'
+)
 
-    parser.add_argument(
-        '--outname', '-o',
-        dest="outfile_name",
-        metavar="FILENAME",
-        default=None,
-        help='The name for the output archive.'
-    )
+parser.add_argument(
+    '--dry-run', '-n',
+    dest="dry_run",
+    default=False,
+    action='store_true',
+    help='Only print which files would be backed up.'
+)
 
-    parser.add_argument(
-        '--dry-run', '-n',
-        dest="dry_run",
-        default=False,
-        action='store_true',
-        help='Only print which files would be backed up.'
-    )
+parser.add_argument(
+    '--ignore-missing', '-i',
+    dest="ignore_missing",
+    default=False,
+    action='store_true',
+    help='Do not abort the backup when files are missing.'
+)
 
-    parser.add_argument(
-        '--ignore-missing', '-i',
-        dest="ignore_missing",
-        default=False,
-        action='store_true',
-        help='Do not abort the backup when files are missing.'
-    )
-
-    parser.add_argument(
-        '--comment', '-c',
-        dest="comment",
-        default="",
-        help='A comment to be stored in the resulting Zip.'
-    )
-
-    return parser.parse_args()
+parser.add_argument(
+    '--comment', '-c',
+    dest="comment",
+    default="",
+    help='A comment to be stored in the resulting Zip.'
+)
 
 
 class ZipFile (zipfile.ZipFile):
@@ -138,9 +134,7 @@ class ZipFile (zipfile.ZipFile):
         self.comment = manifest.encode("utf-8")
 
 
-if __name__ == "__main__":
-
-    args = parse_args()
+def main(args):
 
     try:
         urls = urls_from_save(args.infile_name)
@@ -192,3 +186,9 @@ if __name__ == "__main__":
 
     if not args.dry_run:
         print("All done. Backed-up contents found in", args.outfile_name)
+
+
+if __name__ == "__main__":
+
+    args = parser.parse_args()
+    main(args)
