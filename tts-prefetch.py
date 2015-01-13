@@ -145,9 +145,10 @@ def prefetch_file(filename,
             continue
 
         content_type = response.getheader('Content-Type').strip()
-        if not (content_expected(content_type) or ignore_content_type):
-            print("Content type %s does not match expected type." %
-                  content_type)
+        is_expected = content_expected(content_type)
+        if not (is_expected or ignore_content_type):
+            print("Error: Content type %s does not match expected type. "
+                  "Aborting." % content_type)
             sys.exit(1)
 
         try:
@@ -164,6 +165,10 @@ def prefetch_file(filename,
             except FileNotFoundError:
                 pass
             raise
+
+        if not is_expected:
+            print("Warning: Content type %s did not match expected type." %
+                  content_type)
 
         done.add(url)
 
