@@ -81,8 +81,14 @@ def prefetch_file(filename,
 
     print("Prefetching assets for %s." % filename)
 
+    try:
+        urls = urls_from_save(filename)
+    except FileNotFoundError as error:
+        print("%s: %s" % (error.strerror, error.filename))
+        raise
+
     done = set()
-    for path, url in urls_from_save(filename):
+    for path, url in urls:
 
         if semaphore and semaphore.acquire(blocking=False):
             print("Aborted.")
@@ -146,6 +152,9 @@ def prefetch_file(filename,
             with open(outfile_name, "wb") as outfile:
                 outfile.write(response.read())
             print("ok")
+        except FileNotFoundError as error:
+            print("%s: %s" % (error.strerror, error.filename))
+            raise
         except:
             # Don’t leave files with partial content lying around.
             try:
@@ -161,13 +170,18 @@ def main(args, semaphore=None):
 
     for infile_name in args.infile_names:
 
-        prefetch_file(infile_name,
-                      dry_run=args.dry_run,
-                      refetch=args.refetch,
-                      ignore_content_type=args.ignore_content_type,
-                      gamedata_dir=args.gamedata_dir,
-                      timeout=args.timeout,
-                      semaphore=semaphore)
+        try:
+            prefetch_file(infile_name,
+                          dry_run=args.dry_run,
+                          refetch=args.refetch,
+                          ignore_content_type=args.ignore_content_type,
+                          gamedata_dir=args.gamedata_dir,
+                          timeout=args.timeout,
+                          semaphore=semaphore)
+
+        except FileNotFoundError:
+            print("Aborting.")
+            sys.exit(1)
 
 
 if __name__ == "__main__":
