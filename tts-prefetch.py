@@ -127,7 +127,7 @@ def prefetch_file(filename,
             done.add(url)
             continue
 
-        print("%s: " % url, end="", flush=True)
+        print("%s " % url, end="")
 
         if dry_run:
             print("dry run")
@@ -143,6 +143,16 @@ def prefetch_file(filename,
         except urllib.error.URLError as error:
             print("Error (%s)" % error.reason, file=sys.stderr)
             continue
+
+        # Only for informative purposes.
+        length = response.getheader('Content-Length', 0)
+        length_kb = "???"
+        if length:
+            try:
+                length_kb = "%i" % (int(length) / 1000)
+            except ValueError:
+                pass
+        print("(%s kb): " % length_kb, end="", flush=True)
 
         content_type = response.getheader('Content-Type').strip()
         is_expected = content_expected(content_type)
