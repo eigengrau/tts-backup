@@ -165,6 +165,11 @@ def prefetch_file(filename,
 
         done.add(url)
 
+    if dry_run:
+        print("Dry-run for %s completed." % filename)
+    else:
+        print("Prefetching %s completed." % filename)
+
 
 def main(args, semaphore=None):
 
