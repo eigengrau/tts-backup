@@ -126,10 +126,8 @@ class ZipFile (zipfile.ZipFile):
     def put_metadata(self, comment=None):
         """Create a MANIFEST file and store it within the archive."""
 
-        manifest = {
-            "script_revision": REVISION,
-            "export_date":  round(time.time())
-        }
+        manifest = dict(script_revision=REVISION,
+                        export_date=round(time.time()))
 
         if comment:
             manifest['comment'] = comment

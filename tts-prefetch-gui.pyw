@@ -66,19 +66,19 @@ class GUI (Frame):
         self.settings = EntryFrame(
             leftpane,
 
-            ('infile',   FileEntry, {'label': "Input file",
-                                     'initialdir': libtts.GAMEDATA_DEFAULT,
-                                     'filetypes': [("JSON-file", "*.json")],
-                                     'action': 'open',
-                                     'default': self.args.infile}),
-            ('gamedata', DirEntry,  {'label': "Gamedata path",
-                                     'default': libtts.GAMEDATA_DEFAULT,
-                                     'initialdir': homedir,
-                                     'mustexist': True}),
+            ('infile',   FileEntry, dict(label="Input file",
+                                         initialdir=libtts.GAMEDATA_DEFAULT,
+                                         filetypes=[("JSON-file", "*.json")],
+                                         action='open',
+                                         default=self.args.infile)),
+            ('gamedata', DirEntry,  dict(label="Gamedata path",
+                                         default=libtts.GAMEDATA_DEFAULT,
+                                         initialdir=homedir,
+                                         mustexist=True)),
 
-            ('dry_run', ToggleEntry,  {'label': "Dry run"}),
-            ('refetch', ToggleEntry,  {'label': "Refetch"}),
-            ('relax',   ToggleEntry,  {'label': "Relax"}),
+            ('dry_run', ToggleEntry, dict(label="Dry run")),
+            ('refetch', ToggleEntry, dict(label="Refetch")),
+            ('relax',   ToggleEntry, dict(label="Relax")),
 
             text="Settings",
             width=60
