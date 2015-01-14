@@ -119,10 +119,11 @@ class ZipFile (zipfile.ZipFile):
         else:
             try:
                 super().write(filename, *args, **kwargs)
-                log_written()
             except FileNotFoundError:
                 assert self.ignore_missing
                 log_skipped()
+            else:
+                log_written()
 
         self.stored_files.add(filename)
 
@@ -152,10 +153,9 @@ def main(args):
         sys.exit(1)
 
     # Change working dir, since get_fs_path gives us a relative path.
+    orig_path = os.getcwd()
     try:
-        orig_path = os.getcwd()
-        data_path = args.gamedata_dir
-        os.chdir(data_path)
+        os.chdir(args.gamedata_dir)
     except FileNotFoundError as error:
         errmsg = "Could not open gamedata directory '{dir}': {error}".format(
             dir=args.gamedata_dir,

@@ -179,7 +179,6 @@ def prefetch_file(filename,
         try:
             with open(outfile_name, 'wb') as outfile:
                 outfile.write(response.read())
-            print("ok")
 
         except FileNotFoundError as error:
             print_err("Error writing object to disk: {}".format(error))
@@ -190,6 +189,9 @@ def prefetch_file(filename,
             with suppress(FileNotFoundError):
                 os.remove(outfile_name)
             raise
+
+        else:
+            print("ok")
 
         if not is_expected:
             errmsg = ("Warning: Content type {} did not match "
