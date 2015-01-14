@@ -161,6 +161,7 @@ def main(args):
             dir=args.gamedata_dir,
             error=error
         )
+        print_err(errmsg)
         sys.exit(1)
 
     # We also need to correct the the destination path now.
