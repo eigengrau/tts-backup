@@ -104,7 +104,7 @@ class ZipFile (zipfile.ZipFile):
         # Logging.
         curdir = os.getcwd()
         absname = os.path.join(curdir, filename)
-        log_skipped = lambda: print("%s (not found)" % absname)
+        log_skipped = lambda: print("{} (not found)".format(absname))
         log_written = lambda: print(absname)
 
         if not (os.path.isfile(filename) or self.ignore_missing):
@@ -202,10 +202,12 @@ def main(args):
         outfile.put_metadata(comment=args.comment)
 
     if args.dry_run:
-        print("Dry run for %s completed." % args.infile_name)
+        print("Dry run for {file} completed.".format(file=args.infile_name))
     else:
-        print("Backed-up contents for %s found in %s." %
-              (args.infile_name, args.outfile_name))
+        print("Backed-up contents for {file} found in {outfile}.".format(
+            file=args.infile_name,
+            outfile=args.outfile_name
+        ))
 
 
 if __name__ == '__main__':

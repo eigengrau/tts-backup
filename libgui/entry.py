@@ -80,7 +80,7 @@ class FileEntry (FSEntry):
         elif action == 'open':
             self.ask_func = filedialog.askopenfilename
         else:
-            raise TypeError("Unknown action type: %s" % action)
+            raise TypeError("Unknown action type: {}".format(action))
 
     def ask(self):
 

@@ -82,12 +82,15 @@ def prefetch_file(filename,
                   timeout=5,
                   semaphore=None):
 
-    print("Prefetching assets for %s." % filename)
+    print("Prefetching assets for {file}.".format(file=filename))
 
     try:
         urls = urls_from_save(filename)
     except FileNotFoundError as error:
-        print("%s: %s" % (error.strerror, error.filename))
+        print("{error}: {filename}".format(
+            error=error.strerror,
+            filename=error.filename
+        ))
         raise
 
     done = set()
@@ -100,8 +103,8 @@ def prefetch_file(filename,
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
         if not urllib.parse.urlparse(url).scheme:
-            print_err("Warning: URL %s does not specify a URL scheme. "
-                      "Assuming http." % url)
+            print_err("Warning: URL {url} does not specify a URL scheme. "
+                      "Assuming http.".format(url=url))
             fetch_url = "http://" + url
         else:
             fetch_url = url
@@ -120,8 +123,11 @@ def prefetch_file(filename,
             content_expected = lambda mime: mime in ('image/jpeg',
                                                      'image/png')
         else:
-            raise ValueError("Do not know how to retrieve URL %s at %s." %
-                             (url, path))
+            errstr = "Do not know how to retrieve URL {url} at {path}.".format(
+                url=url,
+                path=path
+            )
+            raise ValueError(errstr)
 
         outfile_name = os.path.join(gamedata_dir, get_fs_path(path, url))
 
@@ -130,7 +136,7 @@ def prefetch_file(filename,
             done.add(url)
             continue
 
-        print("%s " % url, end="")
+        print("{} ".format(url), end="")
 
         if dry_run:
             print("dry run")
@@ -156,7 +162,7 @@ def prefetch_file(filename,
         length_kb = "???"
         if length:
             try:
-                length_kb = "%i" % (int(length) / 1000)
+                length_kb = int(length) / 1000
             except ValueError:
                 pass
         size_msg = "({length} kb): ".format(length=length_kb)
@@ -166,8 +172,8 @@ def prefetch_file(filename,
         is_expected = content_expected(content_type)
         if not (is_expected or ignore_content_type):
             print_err(
-                "Error: Content type %s does not match expected type. "
-                "Aborting. Use --relax to ignore." % content_type
+                "Error: Content type {type} does not match expected type. "
+                "Aborting. Use --relax to ignore.".format(type=content_type)
             )
             sys.exit(1)
 
@@ -176,7 +182,10 @@ def prefetch_file(filename,
                 outfile.write(response.read())
             print("ok")
         except FileNotFoundError as error:
-            print_err("%s: %s" % (error.strerror, error.filename))
+            print_err("{errstr}: {file}".format(
+                errstr=error.strerror,
+                file=error.filename
+            ))
             raise
         except:
             # Don’t leave files with partial content lying around.
@@ -187,15 +196,17 @@ def prefetch_file(filename,
             raise
 
         if not is_expected:
-            print_err("Warning: Content type %s did not match expected type." %
-                      content_type)
+            errmsg = ("Warning: Content type {} did not match "
+                      "expected type.".format(content_type))
+            print_err(errmsg)
 
         done.add(url)
 
     if dry_run:
-        print("Dry-run for %s completed." % filename)
+        completion_msg = "Dry-run for {} completed."
     else:
-        print("Prefetching %s completed." % filename)
+        completion_msg = "Prefetching {} completed."
+    print(completion_msg.format(filename))
 
 
 def main(args, semaphore=None):
