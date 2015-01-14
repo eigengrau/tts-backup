@@ -9,12 +9,16 @@ import argparse
 from tkinter import *
 from tkinter.font import Font
 
-from libgui.entry import (DirEntry,
-                          FileEntry,
-                          ToggleEntry)
-from libgui.frame import (EntryFrame,
-                          ButtonFrame,
-                          OutputFrame)
+from libgui.entry import (
+    DirEntry,
+    FileEntry,
+    ToggleEntry
+)
+from libgui.frame import (
+    EntryFrame,
+    ButtonFrame,
+    OutputFrame
+)
 
 import libtts
 tts_prefetch = __import__('tts-prefetch')

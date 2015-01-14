@@ -9,9 +9,11 @@ import time
 import zipfile
 
 
-from libtts import (urls_from_save,
-                    get_fs_path,
-                    GAMEDATA_DEFAULT)
+from libtts import (
+    urls_from_save,
+    get_fs_path,
+    GAMEDATA_DEFAULT
+)
 from util import print_err
 
 

@@ -9,13 +9,17 @@ import argparse
 from tkinter import *
 from tkinter.font import Font
 
-from libgui.entry import (DirEntry,
-                          FileEntry,
-                          TextEntry,
-                          ToggleEntry)
-from libgui.frame import (EntryFrame,
-                          ButtonFrame,
-                          OutputFrame)
+from libgui.entry import (
+    DirEntry,
+    FileEntry,
+    TextEntry,
+    ToggleEntry
+)
+from libgui.frame import (
+    EntryFrame,
+    ButtonFrame,
+    OutputFrame
+)
 
 import libtts
 tts_backup = __import__('tts-backup')

@@ -8,11 +8,13 @@ import urllib.error
 import urllib.parse
 import signal
 
-from libtts import (urls_from_save,
-                    is_obj,
-                    is_image,
-                    get_fs_path,
-                    GAMEDATA_DEFAULT)
+from libtts import (
+    urls_from_save,
+    is_obj,
+    is_image,
+    get_fs_path,
+    GAMEDATA_DEFAULT
+)
 from util import print_err
 
 
@@ -137,11 +139,16 @@ def prefetch_file(filename,
 
         try:
             response = urllib.request.urlopen(fetch_url, timeout=timeout)
+
         except urllib.error.HTTPError as error:
-            print_err("Error %s (%s)" % (error.code, error.reason))
+            print_err("Error {code} ({reason})".format(
+                code=error.code,
+                reason=error.reason)
+            )
             continue
+
         except urllib.error.URLError as error:
-            print_err("Error (%s)" % error.reason)
+            print_err("Error ({reason})".format(reason=error.reason))
             continue
 
         # Only for informative purposes.
@@ -152,13 +159,16 @@ def prefetch_file(filename,
                 length_kb = "%i" % (int(length) / 1000)
             except ValueError:
                 pass
-        print("(%s kb): " % length_kb, end="", flush=True)
+        size_msg = "({length} kb): ".format(length=length_kb)
+        print(size_msg, end="", flush=True)
 
         content_type = response.getheader('Content-Type').strip()
         is_expected = content_expected(content_type)
         if not (is_expected or ignore_content_type):
-            print_err("Error: Content type %s does not match expected type. "
-                      "Aborting. Use --relax to ignore." % content_type)
+            print_err(
+                "Error: Content type %s does not match expected type. "
+                "Aborting. Use --relax to ignore." % content_type
+            )
             sys.exit(1)
 
         try:
@@ -193,13 +203,15 @@ def main(args, semaphore=None):
     for infile_name in args.infile_names:
 
         try:
-            prefetch_file(infile_name,
-                          dry_run=args.dry_run,
-                          refetch=args.refetch,
-                          ignore_content_type=args.ignore_content_type,
-                          gamedata_dir=args.gamedata_dir,
-                          timeout=args.timeout,
-                          semaphore=semaphore)
+            prefetch_file(
+                infile_name,
+                dry_run=args.dry_run,
+                refetch=args.refetch,
+                ignore_content_type=args.ignore_content_type,
+                gamedata_dir=args.gamedata_dir,
+                timeout=args.timeout,
+                semaphore=semaphore
+            )
 
         except FileNotFoundError:
             print_err("Aborting.")

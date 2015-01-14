@@ -1,5 +1,6 @@
 from functools import partial
 
+
 class ShadowProxy:
     """Proxy objects for arbitrary objects, with the ability to divert
     attribute access from one attribute to another.
