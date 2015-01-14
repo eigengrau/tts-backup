@@ -88,7 +88,7 @@ def prefetch_file(filename,
         urls = urls_from_save(filename)
     except FileNotFoundError as error:
         print("{error}: {filename}".format(
-            error=error.strerror,
+            error=error,
             filename=error.filename
         ))
         raise
@@ -183,7 +183,7 @@ def prefetch_file(filename,
             print("ok")
         except FileNotFoundError as error:
             print_err("{errstr}: {file}".format(
-                errstr=error.strerror,
+                errstr=error,
                 file=error.filename
             ))
             raise

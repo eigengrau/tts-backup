@@ -146,7 +146,7 @@ def main(args):
     except FileNotFoundError as error:
         errmsg = "Could not read URLs from '{file}': {error}".format(
             file=args.infile_name,
-            error=error.strerror
+            error=error
         )
         print_err(errmsg)
         sys.exit(1)
@@ -159,7 +159,7 @@ def main(args):
     except FileNotFoundError as error:
         errmsg = "Could not open gamedata directory '{dir}': {error}".format(
             dir=args.gamedata_dir,
-            error=error.strerror
+            error=error
         )
         sys.exit(1)
 
@@ -187,7 +187,7 @@ def main(args):
             except FileNotFoundError as error:
                 errmsg = "Could not write {filename} to Zip ({error}).".format(
                     filename=filename,
-                    error=error.strerror
+                    error=error
                 )
                 print_err(errmsg, "Aborting.", sep='\n')
                 if not args.dry_run:
