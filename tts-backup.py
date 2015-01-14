@@ -189,7 +189,7 @@ def main(args):
                     filename=filename,
                     error=error
                 )
-                print_err(errmsg, "Aborting.", sep='\n')
+                print_err(errmsg, "Aborting.", sep="\n")
                 if not args.dry_run:
                     print_err("Zip file is incomplete.")
                 sys.exit(1)
