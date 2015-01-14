@@ -8,6 +8,7 @@ import sys
 import time
 import zipfile
 
+
 from libtts import (urls_from_save,
                     get_fs_path,
                     GAMEDATA_DEFAULT)
@@ -104,7 +105,7 @@ class ZipFile (zipfile.ZipFile):
         log_written = lambda: print(absname)
 
         if not (os.path.isfile(filename) or self.ignore_missing):
-            raise FileNotFoundError
+            raise FileNotFoundError("No such file: {}".format(filename))
 
         if self.dry_run and os.path.isfile(filename):
             log_written()
@@ -141,9 +142,12 @@ def main(args):
 
     try:
         urls = urls_from_save(args.infile_name)
-    except FileNotFoundError:
-        print("File not found: %s" % args.infile_name,
-              file=sys.stderr)
+    except FileNotFoundError as error:
+        errmsg = "Could not read URLs from '{file}': {error}".format(
+            file=args.infile_name,
+            error=error.strerror
+        )
+        print(errmsg, file=sys.stderr)
         sys.exit(1)
 
     # Change working dir, since get_fs_path gives us a relative path.
@@ -151,9 +155,12 @@ def main(args):
         orig_path = os.getcwd()
         data_path = args.gamedata_dir
         os.chdir(data_path)
-    except FileNotFoundError:
-        print("Gamedata directory not found: %s" % args.gamedata_dir,
-              file=sys.stderr)
+    except FileNotFoundError as error:
+        errmsg = "Could not open gamedata directory '{dir}': {error}".format(
+            dir=args.gamedata_dir,
+            error=error.strerror
+        )
+        print(errmsg, file=sys.stderr)
         sys.exit(1)
 
     # We also need to correct the the destination path now.
@@ -177,9 +184,12 @@ def main(args):
             try:
                 outfile.write(filename)
 
-            except FileNotFoundError:
-                print("File not found: %s\nAborting.." % filename,
-                      file=sys.stderr)
+            except FileNotFoundError as error:
+                errmsg = "Could not write {filename} to Zip ({error}).".format(
+                    filename=filename,
+                    error=error.strerror
+                )
+                print(errmsg, "Aborting.", sep='\n', file=sys.stderr)
                 if not args.dry_run:
                     print("Zip file is incomplete.", file=sys.stderr)
                 sys.exit(1)
