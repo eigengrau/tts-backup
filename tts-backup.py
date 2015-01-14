@@ -75,7 +75,10 @@ class ZipFile (zipfile.ZipFile):
     file to disk.
     """
 
-    def __init__(self, *args, dry_run=False, ignore_missing=False, **kwargs):
+    def __init__(self, *args,
+                 dry_run=False,
+                 ignore_missing=False,
+                 **kwargs):
 
         self.dry_run = dry_run
         self.stored_files = set()
