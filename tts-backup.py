@@ -174,10 +174,19 @@ def main(args):
         )
         args.outfile_name = os.path.join(orig_path, outfile_basename) + ".zip"
 
-    # Do the job.
-    with ZipFile(args.outfile_name, 'w',
-                 dry_run=args.dry_run,
-                 ignore_missing=args.ignore_missing) as outfile:
+    try:
+        zipfile = ZipFile(args.outfile_name, 'w',
+                          dry_run=args.dry_run,
+                          ignore_missing=args.ignore_missing)
+    except FileNotFoundError as error:
+        errmsg = "Could not write to Zip archive '{outfile}': {error}".format(
+            outfile=args.outfile_name,
+            error=error
+        )
+        print_err(errmsg)
+        sys.exit(1)
+
+    with zipfile as outfile:
 
         for path, url in urls:
 
