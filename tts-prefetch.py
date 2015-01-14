@@ -88,9 +88,9 @@ def prefetch_file(filename,
     try:
         urls = urls_from_save(filename)
     except FileNotFoundError as error:
-        print("{error}: {filename}".format(
+        print_err("Error retrieving URLs from {filename}: {error}".format(
             error=error,
-            filename=error.filename
+            filename=filename
         ))
         raise
 
@@ -182,10 +182,7 @@ def prefetch_file(filename,
             print("ok")
 
         except FileNotFoundError as error:
-            print_err("{errstr}: {file}".format(
-                errstr=error,
-                file=error.filename
-            ))
+            print_err("Error writing object to disk: {}".format(error))
             raise
 
         # Don’t leave files with partial content lying around.

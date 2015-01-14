@@ -189,9 +189,11 @@ def main(args):
                     filename=filename,
                     error=error
                 )
-                print_err(errmsg, "Aborting.", sep="\n")
+                print_err(errmsg, "Aborting.", sep="\n", end=" ")
                 if not args.dry_run:
                     print_err("Zip file is incomplete.")
+                else:
+                    print_err()
                 sys.exit(1)
 
         # Finally, include the save file itself.
