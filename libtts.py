@@ -81,12 +81,13 @@ def get_fs_path(path, url):
         return os.path.join(IMGPATH, filename)
 
     else:
-        raise ValueError("Do not know how to generate path for URL %s at %s." %
-                         (url, path))
+        errstr = ("Do not know how to generate path for "
+                  "URL {url} at {path}.".format(url=url, path=path))
+        raise ValueError(errstr)
 
 
 def urls_from_save(filename):
 
-    with open(filename, "r", encoding="utf-8") as infile:
+    with open(filename, 'r', encoding='utf-8') as infile:
         save = json.load(infile)
     return seekURL(save)

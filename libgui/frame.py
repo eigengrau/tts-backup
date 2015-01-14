@@ -79,7 +79,7 @@ class StreamOutput (Text):
 
         self.buffer = []
 
-        self.tag_configure("err", foreground="red")
+        self.tag_configure('err', foreground='red')
 
     def install(self):
 
@@ -96,7 +96,7 @@ class StreamOutput (Text):
         # Make a proxy which replaces self.write with self.write.err,
         # so we can colorize both streams differently.
         stderr_proxy = util.ShadowProxy(proxy_for=self)
-        stderr_proxy.divert_access("write", "write_err")
+        stderr_proxy.divert_access('write', 'write_err')
 
         self.stdout, sys.stdout = sys.stdout, self
         self.stderr, sys.stderr = sys.stderr, stderr_proxy
@@ -120,7 +120,7 @@ class StreamOutput (Text):
 
     def write_err(self, s):
 
-        self.insert('end', s, "err")
+        self.insert('end', s, 'err')
         self.see('end')
 
     def flush(self):
