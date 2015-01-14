@@ -17,7 +17,7 @@ from libgui.frame import (EntryFrame,
                           OutputFrame)
 
 import libtts
-tts_prefetch = __import__("tts-prefetch")
+tts_prefetch = __import__('tts-prefetch')
 
 
 class GUI (Frame):
@@ -28,10 +28,10 @@ class GUI (Frame):
     )
 
     argparser.add_argument('infile',
-                           metavar="FILENAME",
-                           default="",
+                           metavar='FILENAME',
+                           default='',
                            nargs='?',
-                           help='The save file or mod in JSON format.')
+                           help="The save file or mod in JSON format.")
 
     def __init__(self, master):
 
@@ -56,29 +56,29 @@ class GUI (Frame):
 
         self.label = Label(self,
                            text="TTS-Prefetch",
-                           font=Font(size=14, weight="bold"))
+                           font=Font(size=14, weight='bold'))
         self.label.pack()
 
         leftpane = Frame(self)
-        leftpane.configure(bg="black")
+        leftpane.configure(bg='black')
 
         homedir = os.path.expanduser("~")
         self.settings = EntryFrame(
             leftpane,
 
-            ("infile",   FileEntry, {"label": "Input file",
-                                     "initialdir": libtts.GAMEDATA_DEFAULT,
-                                     "filetypes": [("JSON-file", "*.json")],
-                                     "action": "open",
-                                     "default": self.args.infile}),
-            ("gamedata", DirEntry,  {"label": "Gamedata path",
-                                     "default": libtts.GAMEDATA_DEFAULT,
-                                     "initialdir": homedir,
-                                     "mustexist": True}),
+            ('infile',   FileEntry, {'label': "Input file",
+                                     'initialdir': libtts.GAMEDATA_DEFAULT,
+                                     'filetypes': [("JSON-file", "*.json")],
+                                     'action': 'open',
+                                     'default': self.args.infile}),
+            ('gamedata', DirEntry,  {'label': "Gamedata path",
+                                     'default': libtts.GAMEDATA_DEFAULT,
+                                     'initialdir': homedir,
+                                     'mustexist': True}),
 
-            ("dry_run", ToggleEntry,  {"label": "Dry run"}),
-            ("refetch", ToggleEntry,  {"label": "Refetch"}),
-            ("relax",   ToggleEntry,  {"label": "Relax"}),
+            ('dry_run', ToggleEntry,  {'label': "Dry run"}),
+            ('refetch', ToggleEntry,  {'label': "Refetch"}),
+            ('relax',   ToggleEntry,  {'label': "Relax"}),
 
             text="Settings",
             width=60
@@ -86,11 +86,11 @@ class GUI (Frame):
         self.settings.pack(fill=X)
 
         control = LabelFrame(leftpane, text="Control")
-        self.buttons = ButtonFrame(control, "Run", "Stop", "Quit")
+        self.buttons = ButtonFrame(control, 'Run', 'Stop', 'Quit')
         self.buttons.pack()
-        self.buttons.on("Run", self.run)
-        self.buttons.on("Stop", self.stop)
-        self.buttons.on("Quit", self.quit)
+        self.buttons.on('Run', self.run)
+        self.buttons.on('Stop', self.stop)
+        self.buttons.on('Quit', self.quit)
         control.pack(fill=X)
 
         leftpane.pack(side=LEFT, anchor=N)
@@ -159,7 +159,7 @@ class GUI (Frame):
         return tts_prefetch.parser.parse_args(args=commands)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     root = Tk()
     gui = GUI(root)

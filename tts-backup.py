@@ -17,52 +17,52 @@ REVISION = 28
 
 
 parser = argparse.ArgumentParser(
-    description='Back-up locally cached content from a TTS .json file.'
+    description="Back-up locally cached content from a TTS .json file."
 )
 
 parser.add_argument(
     'infile_name',
-    metavar="FILENAME",
-    help='The save file or mod in JSON format.'
+    metavar='FILENAME',
+    help="The save file or mod in JSON format."
 )
 
 parser.add_argument(
-    '--gamedata',
-    dest="gamedata_dir",
-    metavar="PATH",
+    "--gamedata",
+    dest='gamedata_dir',
+    metavar='PATH',
     default=GAMEDATA_DEFAULT,
-    help='The path to the TTS game data directory.'
+    help="The path to the TTS game data directory."
 )
 
 parser.add_argument(
-    '--outname', '-o',
-    dest="outfile_name",
-    metavar="FILENAME",
+    "--outname", '-o',
+    dest='outfile_name',
+    metavar='FILENAME',
     default=None,
-    help='The name for the output archive.'
+    help="The name for the output archive."
 )
 
 parser.add_argument(
-    '--dry-run', '-n',
-    dest="dry_run",
+    "--dry-run", "-n",
+    dest='dry_run',
     default=False,
     action='store_true',
-    help='Only print which files would be backed up.'
+    help="Only print which files would be backed up."
 )
 
 parser.add_argument(
-    '--ignore-missing', '-i',
-    dest="ignore_missing",
+    "--ignore-missing", "-i",
+    dest='ignore_missing',
     default=False,
     action='store_true',
-    help='Do not abort the backup when files are missing.'
+    help="Do not abort the backup when files are missing."
 )
 
 parser.add_argument(
-    '--comment', '-c',
+    "--comment", "-c",
     dest="comment",
     default="",
-    help='A comment to be stored in the resulting Zip.'
+    help="A comment to be stored in the resulting Zip."
 )
 
 
@@ -131,7 +131,7 @@ class ZipFile (zipfile.ZipFile):
             manifest['comment'] = comment
 
         manifest = json.dumps(manifest)
-        self.comment = manifest.encode("utf-8")
+        self.comment = manifest.encode('utf-8')
 
 
 def main(args):
@@ -195,7 +195,7 @@ def main(args):
               (args.infile_name, args.outfile_name))
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     args = parser.parse_args()
     main(args)

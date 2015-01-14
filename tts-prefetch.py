@@ -16,51 +16,51 @@ from libtts import (urls_from_save,
 
 
 parser = argparse.ArgumentParser(
-    description='Download assets referenced in TTS .json files.'
+    description="Download assets referenced in TTS .json files."
 )
 
 parser.add_argument(
     'infile_names',
-    metavar="FILENAME",
+    metavar='FILENAME',
     nargs='+',
-    help='The save file or mod in JSON format.'
+    help="The save file or mod in JSON format."
 )
 
 parser.add_argument(
-    '--gamedata',
-    dest="gamedata_dir",
-    metavar="PATH",
+    "--gamedata",
+    dest='gamedata_dir',
+    metavar='PATH',
     default=GAMEDATA_DEFAULT,
-    help='The path to the TTS game data directory.'
+    help="The path to the TTS game data directory."
 )
 
 parser.add_argument(
-    '--dry-run', '-n',
-    dest="dry_run",
+    "--dry-run", "-n",
+    dest='dry_run',
     default=False,
     action='store_true',
-    help='Only print which files would be downloaded.'
+    help="Only print which files would be downloaded."
 )
 
 parser.add_argument(
-    '--refetch', '-r',
-    dest="refetch",
+    "--refetch", "-r",
+    dest='refetch',
     default=False,
     action='store_true',
-    help='Rewrite objects that already exist in the cache.'
+    help="Rewrite objects that already exist in the cache."
 )
 
 parser.add_argument(
-    '--relax', '-x',
-    dest="ignore_content_type",
+    "--relax", "-x",
+    dest='ignore_content_type',
     default=False,
     action='store_true',
     help="Do not abort when encountering an unexpected MIME type."
 )
 
 parser.add_argument(
-    '--timeout', '-t',
-    dest="timeout",
+    "--timeout", "-t",
+    dest='timeout',
     default=5,
     type=int,
     help="Connection timeout in s."
@@ -111,11 +111,11 @@ def prefetch_file(filename,
         # type in the response.
         if is_obj(path, url):
             content_expected = lambda mime: any(map(mime.startswith,
-                                                    ("text/plain",
-                                                     "application/json")))
+                                                    ('text/plain',
+                                                     'application/json')))
         elif is_image(path, url):
-            content_expected = lambda mime: mime in ("image/jpeg",
-                                                     "image/png")
+            content_expected = lambda mime: mime in ('image/jpeg',
+                                                     'image/png')
         else:
             raise ValueError("Do not know how to retrieve URL %s at %s." %
                              (url, path))
@@ -163,7 +163,7 @@ def prefetch_file(filename,
             sys.exit(1)
 
         try:
-            with open(outfile_name, "wb") as outfile:
+            with open(outfile_name, 'wb') as outfile:
                 outfile.write(response.read())
             print("ok")
         except FileNotFoundError as error:
@@ -208,7 +208,7 @@ def main(args, semaphore=None):
             sys.exit(1)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     signal.signal(signal.SIGINT, sigint_handler)
     args = parser.parse_args()

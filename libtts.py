@@ -87,6 +87,6 @@ def get_fs_path(path, url):
 
 def urls_from_save(filename):
 
-    with open(filename, "r", encoding="utf-8") as infile:
+    with open(filename, 'r', encoding='utf-8') as infile:
         save = json.load(infile)
     return seekURL(save)

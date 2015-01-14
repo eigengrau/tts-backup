@@ -18,7 +18,7 @@ from libgui.frame import (EntryFrame,
                           OutputFrame)
 
 import libtts
-tts_backup = __import__("tts-backup")
+tts_backup = __import__('tts-backup')
 
 
 class GUI (Frame):
@@ -29,10 +29,10 @@ class GUI (Frame):
     )
 
     argparser.add_argument('infile',
-                           metavar="FILENAME",
-                           default="",
+                           metavar='FILENAME',
+                           default='',
                            nargs='?',
-                           help='The save file or mod in JSON format.')
+                           help="The save file or mod in JSON format.")
 
     def __init__(self, master):
 
@@ -47,7 +47,7 @@ class GUI (Frame):
 
         self.label = Label(self,
                            text="TTS-Backup",
-                           font=Font(size=14, weight="bold"))
+                           font=Font(size=14, weight='bold'))
         self.label.pack()
 
         leftpane = Frame(self)
@@ -56,35 +56,35 @@ class GUI (Frame):
         self.settings = EntryFrame(
             leftpane,
 
-            ("infile",   FileEntry, {"label": "Input file",
-                                     "initialdir": libtts.GAMEDATA_DEFAULT,
-                                     "filetypes": [("JSON-file", "*.json")],
-                                     "action": "open"}),
-            ("gamedata", DirEntry,  {"label": "Gamedata path",
-                                     "default": libtts.GAMEDATA_DEFAULT,
-                                     "initialdir": homedir,
-                                     "mustexist": True}),
-            ("outfile",  FileEntry, {"label": "Output archive",
-                                     "initialdir": homedir,
-                                     "defaultextension": ".zip",
-                                     "action": "save"}),
-            ("comment",  TextEntry, {"label": "Archive comment"}),
+            ('infile',   FileEntry, {'label': "Input file",
+                                     'initialdir': libtts.GAMEDATA_DEFAULT,
+                                     'filetypes': [("JSON-file", "*.json")],
+                                     'action': 'open'}),
+            ('gamedata', DirEntry,  {'label': "Gamedata path",
+                                     'default': libtts.GAMEDATA_DEFAULT,
+                                     'initialdir': homedir,
+                                     'mustexist': True}),
+            ('outfile',  FileEntry, {'label': "Output archive",
+                                     'initialdir': homedir,
+                                     'defaultextension': ".zip",
+                                     'action': 'save'}),
+            ('comment',  TextEntry, {'label': "Archive comment"}),
 
-            ("dry_run",       ToggleEntry,  {"label": "Dry run"}),
-            ("ignore_missing", ToggleEntry, {"label": "Ignore missing"}),
+            ('dry_run',       ToggleEntry,  {'label': "Dry run"}),
+            ('ignore_missing', ToggleEntry, {'label': "Ignore missing"}),
 
             text="Settings",
             width=60
         )
-        self.settings.infile.trace("w", self.on_infile_change)
+        self.settings.infile.trace('w', self.on_infile_change)
         self.settings.infile.set(self.args.infile)
         self.settings.pack(fill=X)
 
         control = LabelFrame(leftpane, text="Control")
-        self.buttons = ButtonFrame(control, "Run", "Quit")
+        self.buttons = ButtonFrame(control, 'Run', 'Quit')
         self.buttons.pack()
-        self.buttons.on("Quit", self.quit)
-        self.buttons.on("Run", self.run)
+        self.buttons.on('Quit', self.quit)
+        self.buttons.on('Run', self.run)
         control.pack(fill=X)
 
         leftpane.pack(side=LEFT, anchor=N)
@@ -156,7 +156,7 @@ class GUI (Frame):
             self.settings.outfile.set(filename)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
 
     root = Tk()
     gui = GUI(root)

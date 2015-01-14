@@ -34,7 +34,7 @@ class ToggleEntry (Frame):
 
         self.label = Label(self, text=label)
         self.label.pack(anchor=W)
-        self.label.bind("<Button-1>", self.toggle)
+        self.label.bind('<Button-1>', self.toggle)
 
     def toggle(self, *args):
 
@@ -75,9 +75,9 @@ class FileEntry (FSEntry):
         self.defaultextension = defaultextension
         self.filetypes = filetypes
 
-        if action == "save":
+        if action == 'save':
             self.ask_func = filedialog.asksaveasfilename
-        elif action == "open":
+        elif action == 'open':
             self.ask_func = filedialog.askopenfilename
         else:
             raise TypeError("Unknown action type: %s" % action)
