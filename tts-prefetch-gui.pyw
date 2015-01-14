@@ -6,6 +6,10 @@ import os.path
 import threading
 import argparse
 
+from contextlib import (
+    ExitStack,
+    suppress
+)
 from tkinter import *
 from tkinter.font import Font
 
@@ -116,11 +120,11 @@ class GUI (Frame):
         self.semaphore = threading.Semaphore(0)
 
         def callback():
-            with self.output:
-                try:
-                    tts_prefetch.main(args, self.semaphore)
-                except SystemExit:
-                    pass
+
+            with ExitStack() as stack:
+                stack.enter_context(self.output)
+                stack.enter_context(suppress(SystemExit))
+                tts_prefetch.main(args, self.semaphore)
 
         thread = threading.Thread(target=callback)
         thread.start()

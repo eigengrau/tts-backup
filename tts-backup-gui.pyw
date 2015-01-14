@@ -6,6 +6,10 @@ import os.path
 import threading
 import argparse
 
+from contextlib import (
+    ExitStack,
+    suppress
+)
 from tkinter import *
 from tkinter.font import Font
 
@@ -108,11 +112,11 @@ class GUI (Frame):
         self.output.clear()
 
         def callback():
-            with self.output:
-                try:
-                    tts_backup.main(args)
-                except SystemExit:
-                    pass
+
+            with ExitStack() as stack:
+                stack.enter_context(self.output)
+                stack.enter_context(suppress(SystemExit))
+                tts_backup.main(args)
 
         thread = threading.Thread(target=callback)
         thread.start()

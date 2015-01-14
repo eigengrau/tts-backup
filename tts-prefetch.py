@@ -7,6 +7,7 @@ import urllib.request
 import urllib.error
 import urllib.parse
 import signal
+from contextlib import suppress
 
 from libtts import (
     urls_from_save,
@@ -161,10 +162,8 @@ def prefetch_file(filename,
         length = response.getheader('Content-Length', 0)
         length_kb = "???"
         if length:
-            try:
+            with suppress(ValueError):
                 length_kb = int(length) / 1000
-            except ValueError:
-                pass
         size_msg = "({length} kb): ".format(length=length_kb)
         print(size_msg, end="", flush=True)
 
@@ -181,18 +180,18 @@ def prefetch_file(filename,
             with open(outfile_name, 'wb') as outfile:
                 outfile.write(response.read())
             print("ok")
+
         except FileNotFoundError as error:
             print_err("{errstr}: {file}".format(
                 errstr=error,
                 file=error.filename
             ))
             raise
+
+        # Don’t leave files with partial content lying around.
         except:
-            # Don’t leave files with partial content lying around.
-            try:
+            with suppress(FileNotFoundError):
                 os.remove(outfile_name)
-            except FileNotFoundError:
-                pass
             raise
 
         if not is_expected:
