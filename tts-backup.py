@@ -12,6 +12,7 @@ import zipfile
 from libtts import (urls_from_save,
                     get_fs_path,
                     GAMEDATA_DEFAULT)
+from util import print_err
 
 
 REVISION = 28
@@ -145,7 +146,7 @@ def main(args):
             file=args.infile_name,
             error=error.strerror
         )
-        print(errmsg, file=sys.stderr)
+        print_err(errmsg)
         sys.exit(1)
 
     # Change working dir, since get_fs_path gives us a relative path.
@@ -158,7 +159,6 @@ def main(args):
             dir=args.gamedata_dir,
             error=error.strerror
         )
-        print(errmsg, file=sys.stderr)
         sys.exit(1)
 
     # We also need to correct the the destination path now.
@@ -187,9 +187,9 @@ def main(args):
                     filename=filename,
                     error=error.strerror
                 )
-                print(errmsg, "Aborting.", sep='\n', file=sys.stderr)
+                print_err(errmsg, "Aborting.", sep='\n')
                 if not args.dry_run:
-                    print("Zip file is incomplete.", file=sys.stderr)
+                    print_err("Zip file is incomplete.")
                 sys.exit(1)
 
         # Finally, include the save file itself.

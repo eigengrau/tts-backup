@@ -13,6 +13,7 @@ from libtts import (urls_from_save,
                     is_image,
                     get_fs_path,
                     GAMEDATA_DEFAULT)
+from util import print_err
 
 
 parser = argparse.ArgumentParser(
@@ -97,8 +98,8 @@ def prefetch_file(filename,
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
         if not urllib.parse.urlparse(url).scheme:
-            print("Warning: URL %s does not specify a URL scheme. "
-                  "Assuming http." % url, file=sys.stderr)
+            print_err("Warning: URL %s does not specify a URL scheme. "
+                      "Assuming http." % url)
             fetch_url = "http://" + url
         else:
             fetch_url = url
@@ -137,11 +138,10 @@ def prefetch_file(filename,
         try:
             response = urllib.request.urlopen(fetch_url, timeout=timeout)
         except urllib.error.HTTPError as error:
-            print("Error %s (%s)" % (error.code, error.reason),
-                  file=sys.stderr)
+            print_err("Error %s (%s)" % (error.code, error.reason))
             continue
         except urllib.error.URLError as error:
-            print("Error (%s)" % error.reason, file=sys.stderr)
+            print_err("Error (%s)" % error.reason)
             continue
 
         # Only for informative purposes.
@@ -157,9 +157,8 @@ def prefetch_file(filename,
         content_type = response.getheader('Content-Type').strip()
         is_expected = content_expected(content_type)
         if not (is_expected or ignore_content_type):
-            print("Error: Content type %s does not match expected type. "
-                  "Aborting. Use --relax to ignore." % content_type,
-                  file=sys.stderr)
+            print_err("Error: Content type %s does not match expected type. "
+                      "Aborting. Use --relax to ignore." % content_type)
             sys.exit(1)
 
         try:
@@ -167,8 +166,7 @@ def prefetch_file(filename,
                 outfile.write(response.read())
             print("ok")
         except FileNotFoundError as error:
-            print("%s: %s" % (error.strerror, error.filename),
-                  file=sys.stderr)
+            print_err("%s: %s" % (error.strerror, error.filename))
             raise
         except:
             # Don’t leave files with partial content lying around.
@@ -179,8 +177,8 @@ def prefetch_file(filename,
             raise
 
         if not is_expected:
-            print("Warning: Content type %s did not match expected type." %
-                  content_type, file=sys.stderr)
+            print_err("Warning: Content type %s did not match expected type." %
+                      content_type)
 
         done.add(url)
 
@@ -204,7 +202,7 @@ def main(args, semaphore=None):
                           semaphore=semaphore)
 
         except FileNotFoundError:
-            print("Aborting.", file=sys.stderr)
+            print_err("Aborting.")
             sys.exit(1)
 
 
