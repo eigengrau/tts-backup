@@ -1,8 +1,7 @@
 import sys
-
 from tkinter import *
 
-import util
+from tts_tools import util
 
 
 class EntryFrame (LabelFrame):
