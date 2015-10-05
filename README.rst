@@ -19,8 +19,10 @@ Alternatively, a binary release for the Windows platform is available
 `here
 <https://github.com/eigengrau/tts-backup/releases/tag/win32-frozen>`__.
 
-To install, simply copy all source files into a directory of your
-convenience.
+Optionally, to use the source distribution, download the current
+`release <https://github.com/eigengrau/tts-backup/releases>`__, and
+either use ``pip`` or ``easy_install`` on the archive file, or extract
+the contents and run ``python setup.py install``.
 
 
 Usage

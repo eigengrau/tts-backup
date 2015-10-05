@@ -1,1 +1,8 @@
 __pycache__
+pip-selfcheck.json
+*.egg-info/
+dist/
+build/
+bin/
+include/
+lib/

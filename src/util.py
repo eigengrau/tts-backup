@@ -2,9 +2,10 @@ import json
 import zipfile
 import os
 import time
+import pkg_resources
 
 
-REVISION = 28
+REVISION = pkg_resources.require("tts-backup")[0].version
 
 
 class ShadowProxy:
