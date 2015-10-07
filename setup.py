@@ -36,12 +36,7 @@ setup(
         'tts_tools.prefetch',
         'tts_tools.libgui'
     ],
-    package_dir={
-        'tts_tools': 'src',
-        'tts_tools.libgui': 'src/libgui',
-        'tts_tools.backup': 'src/backup',
-        'tts_tools.prefetch': 'src/prefetch'
-    },
+    package_dir={'': 'src'},
     license="GPL3",
     entry_points={
         'console_scripts': [
