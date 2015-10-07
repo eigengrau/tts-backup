@@ -5,20 +5,24 @@ import shlex
 from setuptools import setup
 
 
+version = '0.1.0.0'
+
 try:
-    revision = (
+    commit = (
         subprocess
         .check_output(shlex.split('git rev-parse --short HEAD'))
         .rstrip()
         .decode('ASCII')
     )
 except:
-    revision = '0.1.0.0'
+    pass
+else:
+    version = '{}-git-{}'.format(version, commit)
 
 
 setup(
     name='tts-backup',
-    version=revision,
+    version=version,
     description=(
         "Backup Tabletop Simulator saves and assets into comprehensive "
         "Zip files."
