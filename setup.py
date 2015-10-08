@@ -8,16 +8,22 @@ from setuptools import setup
 version = '0.1.0.0'
 
 try:
-    commit = (
+    hash = (
         subprocess
         .check_output(shlex.split('git rev-parse --short HEAD'))
+        .rstrip()
+        .decode('ASCII')
+    )
+    commit = (
+        subprocess
+        .check_output(shlex.split('git rev-list --count HEAD'))
         .rstrip()
         .decode('ASCII')
     )
 except:
     pass
 else:
-    version = '{}-git-{}'.format(version, commit)
+    version = '{}.dev{}+{}'.format(version, commit, hash)
 
 
 setup(
