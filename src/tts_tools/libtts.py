@@ -74,8 +74,13 @@ def get_fs_path(path, url):
         return os.path.join(OBJPATH, filename)
 
     elif is_image(path, url):
-        # Evenn PNGs are stored with .jpg suffix by TTS.
-        filename = recoded_name + ".jpg"
+        # TTS appears to perform some weird heuristics when determining
+        # the file suffix. ._.
+        if url.find(".png") > 0:
+            file_suffix = ".png"
+        else:
+            file_suffix = ".jpg"
+        filename = recoded_name + file_suffix
         return os.path.join(IMGPATH, filename)
 
     else:
