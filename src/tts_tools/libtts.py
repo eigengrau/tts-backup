@@ -5,6 +5,7 @@ import os
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
+BUNDLEPATH = os.path.join("Mods", "Assetbundles")
 
 GAMEDATA_DEFAULT = os.path.expanduser(
     "~/Documents/My Games/Tabletop Simulator"
@@ -53,8 +54,13 @@ def is_obj(path, url):
 
 
 def is_image(path, url):
-    # This assumes that we only have mesh and image URLs.
-    return not is_obj(path, url)
+    # This assumes that we only have mesh, assetbundle and image URLs.
+    return not (is_obj(path, url) or is_assetbundle(path, url))
+
+
+def is_assetbundle(path, url):
+    bundle_keys = ("AssetbundleURL", "AssetbundleSecondaryURL")
+    return path[-1] in bundle_keys
 
 
 def recodeURL(url):
@@ -72,6 +78,10 @@ def get_fs_path(path, url):
     if is_obj(path, url):
         filename = recoded_name + ".obj"
         return os.path.join(OBJPATH, filename)
+
+    elif is_assetbundle(path, url):
+        filename = recoded_name + ".unity3d"
+        return os.path.join(BUNDLEPATH, filename)
 
     elif is_image(path, url):
         # TTS appears to perform some weird heuristics when determining

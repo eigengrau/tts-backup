@@ -9,6 +9,7 @@ from tts_tools.libtts import (
     urls_from_save,
     is_obj,
     is_image,
+    is_assetbundle,
     get_fs_path,
     GAMEDATA_DEFAULT
 )
@@ -61,6 +62,9 @@ def prefetch_file(filename,
             content_expected = lambda mime: any(map(mime.startswith,
                                                     ('text/plain',
                                                      'application/json')))
+        elif is_assetbundle(path, url):
+            content_expected = lambda mime: mime == 'application/octet-stream'
+
         elif is_image(path, url):
             content_expected = lambda mime: mime in ('image/jpeg',
                                                      'image/png')
