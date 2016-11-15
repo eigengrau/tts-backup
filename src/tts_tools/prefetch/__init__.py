@@ -108,6 +108,10 @@ def prefetch_file(filename,
             print_err("Error ({reason})".format(reason=error.reason))
             continue
 
+        except socket.timeout as error:
+            print_err("Error ({reason})".format(reason=error))
+            continue
+
         # Only for informative purposes.
         length = response.getheader('Content-Length', 0)
         length_kb = "???"
