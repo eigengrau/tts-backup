@@ -56,6 +56,12 @@ parser.add_argument(
     type=int,
     help="Connection timeout in s."
 )
+parser.add_argument(
+    "--user-agent", "-a",
+    dest="user_agent",
+    default="tts-backup",
+    help="HTTP user-agent string."
+)
 
 
 def sigint_handler(signum, frame):

@@ -165,7 +165,8 @@ def prefetch_files(args, semaphore=None):
                 ignore_content_type=args.ignore_content_type,
                 gamedata_dir=args.gamedata_dir,
                 timeout=args.timeout,
-                semaphore=semaphore
+                semaphore=semaphore,
+                user_agent=args.user_agent
             )
 
         except FileNotFoundError:
