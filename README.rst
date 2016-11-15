@@ -94,7 +94,7 @@ Usage flags and arguments are as follows:
 ::
 
     usage: tts-prefetch [-h] [--gamedata PATH] [--dry-run] [--refetch] [--relax]
-                        [--timeout TIMEOUT]
+                        [--timeout TIMEOUT] [--user-agent USER_AGENT]
                         FILENAME [FILENAME ...]
 
     Download assets referenced in TTS .json files.
@@ -107,6 +107,9 @@ Usage flags and arguments are as follows:
       --gamedata PATH       The path to the TTS game data directory.
       --dry-run, -n         Only print which files would be downloaded.
       --refetch, -r         Rewrite objects that already exist in the cache.
-      --relax, -x           Don’t abort when encountering an unexpected MIME type.
+      --relax, -x           Do not abort when encountering an unexpected MIME
+                            type.
       --timeout TIMEOUT, -t TIMEOUT
                             Connection timeout in s.
+      --user-agent USER_AGENT, -a USER_AGENT
+                            HTTP user-agent string.

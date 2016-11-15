@@ -12,7 +12,8 @@ from tkinter.font import Font
 from tts_tools.libgui.entry import (
     DirEntry,
     FileEntry,
-    ToggleEntry
+    ToggleEntry,
+    TextEntry
 )
 from tts_tools.libgui.frame import (
     EntryFrame,
@@ -82,9 +83,10 @@ class GUI (Frame):
                                          initialdir=homedir,
                                          mustexist=True)),
 
-            ('dry_run', ToggleEntry, dict(label="Dry run")),
-            ('refetch', ToggleEntry, dict(label="Refetch")),
-            ('relax',   ToggleEntry, dict(label="Relax")),
+            ('dry_run',    ToggleEntry, dict(label="Dry run")),
+            ('refetch',    ToggleEntry, dict(label="Refetch")),
+            ('relax',      ToggleEntry, dict(label="Relax")),
+            ('user_agent', TextEntry,   dict(label="User-agent")),
 
             text="Settings",
             width=60
@@ -161,6 +163,10 @@ class GUI (Frame):
 
         if self.settings.refetch.get():
             commands.append("--refetch")
+
+        user_agent = self.settings.user_agent.get()
+        if user_agent:
+            commands.append(["--user-agent", user_agent])
 
         return cli.parser.parse_args(args=commands)
 

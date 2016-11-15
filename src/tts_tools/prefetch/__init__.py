@@ -21,7 +21,8 @@ def prefetch_file(filename,
                   dry_run=False,
                   gamedata_dir=GAMEDATA_DEFAULT,
                   timeout=5,
-                  semaphore=None):
+                  semaphore=None,
+                  user_agent='TTS prefetch'):
 
     print("Prefetching assets for {file}.".format(file=filename))
 
@@ -84,8 +85,13 @@ def prefetch_file(filename,
             done.add(url)
             continue
 
+        headers = {
+            'User-Agent': user_agent
+        }
+        request = urllib.request.Request(url=fetch_url, headers=headers)
+
         try:
-            response = urllib.request.urlopen(fetch_url, timeout=timeout)
+            response = urllib.request.urlopen(request, timeout=timeout)
 
         except urllib.error.HTTPError as error:
             print_err("Error {code} ({reason})".format(
@@ -159,7 +165,8 @@ def prefetch_files(args, semaphore=None):
                 ignore_content_type=args.ignore_content_type,
                 gamedata_dir=args.gamedata_dir,
                 timeout=args.timeout,
-                semaphore=semaphore
+                semaphore=semaphore,
+                user_agent=args.user_agent
             )
 
         except FileNotFoundError:
