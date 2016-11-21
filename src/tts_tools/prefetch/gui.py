@@ -166,7 +166,7 @@ class GUI (Frame):
 
         user_agent = self.settings.user_agent.get()
         if user_agent:
-            commands.append(["--user-agent", user_agent])
+            commands.extend(["--user-agent", user_agent])
 
         return cli.parser.parse_args(args=commands)
 
