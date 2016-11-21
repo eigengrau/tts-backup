@@ -1,3 +1,4 @@
+import http.client
 import os
 import sys
 import urllib.request
@@ -110,6 +111,10 @@ def prefetch_file(filename,
 
         except socket.timeout as error:
             print_err("Error ({reason})".format(reason=error))
+            continue
+
+        except http.client.HTTPException as error:
+            print_err("HTTP error ({reason})".format(reason=error))
             continue
 
         # Only for informative purposes.
