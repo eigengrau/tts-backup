@@ -126,7 +126,7 @@ def prefetch_file(filename,
         size_msg = "({length} kb): ".format(length=length_kb)
         print(size_msg, end="", flush=True)
 
-        content_type = response.getheader('Content-Type').strip()
+        content_type = response.getheader('Content-Type', '').strip()
         is_expected = content_expected(content_type)
         if not (is_expected or ignore_content_type):
             print_err(
