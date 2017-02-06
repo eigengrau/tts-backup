@@ -186,3 +186,6 @@ def prefetch_files(args, semaphore=None):
         except FileNotFoundError:
             print_err("Aborting.")
             sys.exit(1)
+
+        except SystemExit:
+            pass
