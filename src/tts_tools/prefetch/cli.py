@@ -71,5 +71,6 @@ def sigint_handler(signum, frame):
 def console_entry():
 
     signal.signal(signal.SIGINT, sigint_handler)
+    signal.signal(signal.SIGTERM, sigint_handler)
     args = parser.parse_args()
     prefetch_files(args)
