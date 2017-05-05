@@ -104,3 +104,10 @@ def urls_from_save(filename):
     with open(filename, 'r', encoding='utf-8') as infile:
         save = json.load(infile)
     return seekURL(save)
+
+
+def get_save_name(filename):
+
+    with open(filename, 'r', encoding='utf-8') as infile:
+        save = json.load(infile)
+    return save["SaveName"]

@@ -13,6 +13,7 @@ from tts_tools.libtts import (
     is_image,
     is_assetbundle,
     get_fs_path,
+    get_save_name,
     GAMEDATA_DEFAULT
 )
 from tts_tools.util import print_err
@@ -27,7 +28,15 @@ def prefetch_file(filename,
                   semaphore=None,
                   user_agent='TTS prefetch'):
 
-    print("Prefetching assets for {file}.".format(file=filename))
+    try:
+        save_name = get_save_name(filename)
+    except Exception:
+        save_name = "???"
+
+    print("Prefetching assets for {file} ({save_name}).".format(
+        file=filename,
+        save_name=save_name
+    ))
 
     try:
         urls = urls_from_save(filename)
