@@ -16,7 +16,10 @@ from tts_tools.libtts import (
     get_save_name,
     GAMEDATA_DEFAULT
 )
-from tts_tools.util import print_err
+from tts_tools.util import (
+    print_err,
+    strip_mime_parms
+)
 
 
 def prefetch_file(filename,

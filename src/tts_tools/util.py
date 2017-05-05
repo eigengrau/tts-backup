@@ -104,3 +104,13 @@ def print_err(*args, **kwargs):
     if 'file' in kwargs:
         del kwargs['file']
     print(*args, file=stderr, **kwargs)
+
+
+def strip_mime_parms(mime_type):
+    "Remove any MIME parameters from a content-type header value."
+    idx = mime_type.find(";")
+    has_parms = idx >= 0
+    if has_parms:
+        return mime_type[:idx]
+    else:
+        return mime_type
