@@ -32,6 +32,10 @@ def seekURL(dic, trail=[]):
                 yield from seekURL(elem, newtrail)
 
         elif k.endswith("URL"):
+            # We don’t want tablet URLs.
+            if k == "PageURL":
+                continue
+
             # Some URL keys may be left empty.
             if not v:
                 continue
