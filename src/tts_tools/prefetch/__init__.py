@@ -75,13 +75,21 @@ def prefetch_file(filename,
         if is_obj(path, url):
             content_expected = lambda mime: any(map(mime.startswith,
                                                     ('text/plain',
-                                                     'application/json')))
+                                                     'application/binary',
+                                                     'application/octet-stream',
+                                                     'application/json',
+                                                     'application/x-tgif')))
         elif is_assetbundle(path, url):
-            content_expected = lambda mime: mime == 'application/octet-stream'
+            content_expected = lambda mime: any(map(mime.startswith,
+                                                    ('application/binary',
+                                                     'application/octet-stream')))
 
         elif is_image(path, url):
             content_expected = lambda mime: mime in ('image/jpeg',
-                                                     'image/png')
+                                                     'image/jpg',
+                                                     'image/png',
+                                                     'application/octet-stream',
+                                                     'application/binary')
         else:
             errstr = "Do not know how to retrieve URL {url} at {path}.".format(
                 url=url,
