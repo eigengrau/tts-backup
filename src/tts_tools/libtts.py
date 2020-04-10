@@ -6,6 +6,7 @@ import platform
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
 BUNDLEPATH = os.path.join("Mods", "Assetbundles")
+AUDIOPATH = os.path.join("Mods", "Audio")
 
 platforms = [
     any(platform.win32_ver()),
@@ -33,7 +34,18 @@ def seekURL(dic, trail=[]):
 
         newtrail = trail + [k]
 
-        if isinstance(v, dict):
+        if k == "AudioLibrary":
+            for elem in v:
+                try:
+                    # It appears that AudioLibrary items are mappings of form
+                    # “Item1” → URL, “Item2” → audio title.
+                    yield (newtrail, elem["Item1"])
+                except KeyError:
+                    raise NotImplementedError(
+                        "AudioLibrary has unexpected structure: {}".format(v)
+                    )
+
+        elif isinstance(v, dict):
             yield from seekURL(v, newtrail)
 
         elif isinstance(v, list):
@@ -69,13 +81,22 @@ def is_obj(path, url):
 
 
 def is_image(path, url):
-    # This assumes that we only have mesh, assetbundle and image URLs.
-    return not (is_obj(path, url) or is_assetbundle(path, url))
+    # This assumes that we only have mesh, assetbundle, audio and image URLs.
+    return not (
+        is_obj(path, url)
+        or is_assetbundle(path, url)
+        or is_audiolibrary(path, url)
+    )
 
 
 def is_assetbundle(path, url):
     bundle_keys = ("AssetbundleURL", "AssetbundleSecondaryURL")
     return path[-1] in bundle_keys
+
+
+def is_audiolibrary(path, url):
+    audio_keys = ("CurrentAudioURL", "AudioLibrary")
+    return path[-1] in audio_keys
 
 
 def recodeURL(url):
@@ -97,6 +118,11 @@ def get_fs_path(path, url):
     elif is_assetbundle(path, url):
         filename = recoded_name + ".unity3d"
         return os.path.join(BUNDLEPATH, filename)
+
+    elif is_audiolibrary(path, url):
+        # Is the suffix always MP3, regardless of content?
+        filename = recoded_name + ".MP3"
+        return os.path.join(AUDIOPATH, filename)
 
     elif is_image(path, url):
         # TTS appears to perform some weird heuristics when determining

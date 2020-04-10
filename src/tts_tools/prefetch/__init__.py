@@ -12,6 +12,7 @@ from tts_tools.libtts import (
     is_obj,
     is_image,
     is_assetbundle,
+    is_audiolibrary,
     get_fs_path,
     get_save_name,
     GAMEDATA_DEFAULT
@@ -91,6 +92,11 @@ def prefetch_file(filename,
                                                      'application/octet-stream',
                                                      'application/binary',
                                                      'video/mp4')
+        elif is_audiolibrary(path, url):
+            content_expected = lambda mime: (
+                mime in ('application/octet-stream', 'application/binary')
+                or mime.startswith('audio/')
+            )
         else:
             errstr = "Do not know how to retrieve URL {url} at {path}.".format(
                 url=url,
