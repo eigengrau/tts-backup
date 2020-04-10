@@ -15,7 +15,8 @@ from tts_tools.libtts import (
     is_audiolibrary,
     get_fs_path,
     get_save_name,
-    GAMEDATA_DEFAULT
+    GAMEDATA_DEFAULT,
+    IllegalSavegameException
 )
 from tts_tools.util import (
     print_err,
@@ -44,7 +45,7 @@ def prefetch_file(filename,
 
     try:
         urls = urls_from_save(filename)
-    except FileNotFoundError as error:
+    except (FileNotFoundError, IllegalSavegameException) as error:
         print_err("Error retrieving URLs from {filename}: {error}".format(
             error=error,
             filename=filename
@@ -210,7 +211,7 @@ def prefetch_files(args, semaphore=None):
                 user_agent=args.user_agent
             )
 
-        except FileNotFoundError:
+        except (FileNotFoundError, IllegalSavegameException):
             print_err("Aborting.")
             sys.exit(1)
 

@@ -8,7 +8,8 @@ from tts_tools.util import (
 )
 from tts_tools.libtts import (
     urls_from_save,
-    get_fs_path
+    get_fs_path,
+    IllegalSavegameException
 )
 
 
@@ -16,7 +17,7 @@ def backup_json(args):
 
     try:
         urls = urls_from_save(args.infile_name)
-    except FileNotFoundError as error:
+    except (FileNotFoundError, IllegalSavegameException) as error:
         errmsg = "Could not read URLs from '{file}': {error}".format(
             file=args.infile_name,
             error=error

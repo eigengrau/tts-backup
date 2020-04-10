@@ -24,6 +24,12 @@ GAMEDATA_DEFAULT = os.path.expanduser(
 )
 
 
+class IllegalSavegameException (ValueError):
+
+    def __init__(self):
+        super().__init__("not a Tabletop Simulator savegame")
+
+
 def seekURL(dic, trail=[]):
     """Recursively search through the save game structure and return URLs
     and the paths to them.
@@ -143,7 +149,14 @@ def get_fs_path(path, url):
 def urls_from_save(filename):
 
     with open(filename, 'r', encoding='utf-8') as infile:
-        save = json.load(infile)
+        try:
+            save = json.load(infile)
+        except UnicodeDecodeError:
+            raise IllegalSavegameException
+
+    if not isinstance(save, dict):
+        raise IllegalSavegameException
+
     return seekURL(save)
 
 
