@@ -1,14 +1,25 @@
 import json
 import re
 import os
-
+import platform
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
 BUNDLEPATH = os.path.join("Mods", "Assetbundles")
 
+platforms = [
+    any(platform.win32_ver()),
+    any(platform.mac_ver()),
+    any(platform.libc_ver()),
+]
+platform_idx = platforms.index(True)
+
 GAMEDATA_DEFAULT = os.path.expanduser(
-    "~/Documents/My Games/Tabletop Simulator"
+    [
+        "~/Documents/My Games/Tabletop Simulator",
+        "~/Library/Tabletop Simulator",
+        "~/.local/share/Tabletop Simulator",
+    ][platform_idx]
 )
 
 
