@@ -89,7 +89,8 @@ def prefetch_file(filename,
                                                      'image/jpg',
                                                      'image/png',
                                                      'application/octet-stream',
-                                                     'application/binary')
+                                                     'application/binary',
+                                                     'video/mp4')
         else:
             errstr = "Do not know how to retrieve URL {url} at {path}.".format(
                 url=url,
