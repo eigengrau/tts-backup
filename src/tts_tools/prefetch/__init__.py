@@ -13,6 +13,7 @@ from tts_tools.libtts import (
     is_image,
     is_assetbundle,
     is_audiolibrary,
+    is_pdf,
     get_fs_path,
     get_save_name,
     GAMEDATA_DEFAULT,
@@ -98,6 +99,10 @@ def prefetch_file(filename,
                 mime in ('application/octet-stream', 'application/binary')
                 or mime.startswith('audio/')
             )
+        elif is_pdf(path, url):
+            content_expected = lambda mime: mime in ('application/pdf',
+                                                     'application/binary',
+                                                     'application/octet-stream')
         else:
             errstr = "Do not know how to retrieve URL {url} at {path}.".format(
                 url=url,

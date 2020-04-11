@@ -7,6 +7,7 @@ IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")
 BUNDLEPATH = os.path.join("Mods", "Assetbundles")
 AUDIOPATH = os.path.join("Mods", "Audio")
+PDFPATH = os.path.join("Mods", "PDF")
 
 platforms = [
     any(platform.win32_ver()),
@@ -60,7 +61,7 @@ def seekURL(dic, trail=[]):
                     continue
                 yield from seekURL(elem, newtrail)
 
-        elif k.endswith("URL"):
+        elif k.lower().endswith("url"):
             # We don’t want tablet URLs.
             if k == "PageURL":
                 continue
@@ -87,11 +88,13 @@ def is_obj(path, url):
 
 
 def is_image(path, url):
-    # This assumes that we only have mesh, assetbundle, audio and image URLs.
+    # This assumes that we only have mesh, assetbundle, audio, PDF and image
+    # URLs.
     return not (
         is_obj(path, url)
         or is_assetbundle(path, url)
         or is_audiolibrary(path, url)
+        or is_pdf(path, url)
     )
 
 
@@ -103,6 +106,10 @@ def is_assetbundle(path, url):
 def is_audiolibrary(path, url):
     audio_keys = ("CurrentAudioURL", "AudioLibrary")
     return path[-1] in audio_keys
+
+
+def is_pdf(path, url):
+    return path[-1] == "PDFUrl"
 
 
 def recodeURL(url):
@@ -129,6 +136,10 @@ def get_fs_path(path, url):
         # Is the suffix always MP3, regardless of content?
         filename = recoded_name + ".MP3"
         return os.path.join(AUDIOPATH, filename)
+
+    elif is_pdf(path, url):
+        filename = recoded_name + ".PDF"
+        return os.path.join(PDFPATH, filename)
 
     elif is_image(path, url):
         # TTS appears to perform some weird heuristics when determining
