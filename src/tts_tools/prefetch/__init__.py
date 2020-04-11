@@ -216,9 +216,6 @@ def prefetch_files(args, semaphore=None):
                 user_agent=args.user_agent
             )
 
-        except (FileNotFoundError, IllegalSavegameException):
+        except (FileNotFoundError, IllegalSavegameException, SystemExit):
             print_err("Aborting.")
             sys.exit(1)
-
-        except SystemExit:
-            pass
