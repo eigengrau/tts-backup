@@ -175,4 +175,9 @@ def get_save_name(filename):
 
     with open(filename, 'r', encoding='utf-8') as infile:
         save = json.load(infile)
+
+    # Handle possible WorkshopFileInfos.json
+    if isinstance(save, list):
+        return None
+
     return save["SaveName"]
