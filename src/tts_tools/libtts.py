@@ -9,20 +9,16 @@ BUNDLEPATH = os.path.join("Mods", "Assetbundles")
 AUDIOPATH = os.path.join("Mods", "Audio")
 PDFPATH = os.path.join("Mods", "PDF")
 
-platforms = [
-    any(platform.win32_ver()),
-    any(platform.mac_ver()),
-    any(platform.libc_ver()),
-]
-platform_idx = platforms.index(True)
-
-GAMEDATA_DEFAULT = os.path.expanduser(
-    [
-        "~/Documents/My Games/Tabletop Simulator",
-        "~/Library/Tabletop Simulator",
-        "~/.local/share/Tabletop Simulator",
-    ][platform_idx]
-)
+gamedata_map = {
+  'Windows': '~/Documents/My Games/Tabletop Simulator',
+  'Darwin': '~/Library/Tabletop Simulator', # MacOS
+  'Linux': '~/.local/share/Tabletop Simulator',
+}
+try:
+  active_platform = platform.system()
+  GAMEDATA_DEFAULT = os.path.expanduser(gamedata_map[active_platform])
+except KeyError:
+  GAMEDATA_DEFAULT = os.path.expanduser(gamedata_map['Windows'])
 
 
 class IllegalSavegameException (ValueError):
