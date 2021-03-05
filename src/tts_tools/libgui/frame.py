@@ -1,5 +1,17 @@
 import sys
-from tkinter import *
+from tkinter import (
+    LabelFrame,
+    Frame,
+    Button,
+    LEFT,
+    Scrollbar,
+    BOTH,
+    RIGHT,
+    X,
+    Y,
+    Text,
+    END,
+)
 
 from tts_tools import util
 

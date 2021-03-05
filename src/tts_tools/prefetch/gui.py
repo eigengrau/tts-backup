@@ -3,7 +3,7 @@ import os.path
 import threading
 import argparse
 from contextlib import ExitStack, suppress
-from tkinter import *
+from tkinter import Label, LabelFrame, N, LEFT, BOTH, Tk, X, Frame
 from tkinter.font import Font
 
 from tts_tools.libgui.entry import DirEntry, FileEntry, ToggleEntry, TextEntry

@@ -18,7 +18,7 @@ try:
         .rstrip()
         .decode("ASCII")
     )
-except:
+except Exception:
     pass
 else:
     version = "{}.dev{}+{}".format(version, commit, hash)
@@ -40,7 +40,13 @@ setup(
         "tts_tools.prefetch",
         "tts_tools.libgui",
     ],
-    extras_require={"dev": ["pytest==6.2.2", "pytest-black==0.3.12"]},
+    extras_require={
+        "dev": [
+            "pytest==6.2.2",
+            "pytest-black==0.3.12",
+            "pytest-flake8==1.0.7",
+        ]
+    },
     package_dir={"": "src"},
     license="GPL3",
     entry_points={

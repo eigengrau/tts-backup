@@ -58,8 +58,12 @@ class ZipFile(zipfile.ZipFile):
         # Logging.
         curdir = os.getcwd()
         absname = os.path.join(curdir, filename)
-        log_skipped = lambda: print("{} (not found)".format(absname))
-        log_written = lambda: print(absname)
+
+        def log_skipped():
+            print("{} (not found)".format(absname))
+
+        def log_written():
+            print(absname)
 
         if not (os.path.isfile(filename) or self.ignore_missing):
             raise FileNotFoundError("No such file: {}".format(filename))

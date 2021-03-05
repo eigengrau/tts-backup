@@ -1,9 +1,10 @@
+import re
 import os
 import os.path
 import threading
 import argparse
 from contextlib import ExitStack, suppress
-from tkinter import *
+from tkinter import Frame, Label, LabelFrame, X, BOTH, LEFT, N, Tk
 from tkinter.font import Font
 
 from tts_tools.libgui.entry import DirEntry, FileEntry, TextEntry, ToggleEntry

@@ -1,4 +1,17 @@
-from tkinter import *
+from tkinter import (
+    Frame,
+    LEFT,
+    StringVar,
+    Label,
+    BooleanVar,
+    Checkbutton,
+    Button,
+    font,
+    RIGHT,
+    W,
+    Entry,
+    X,
+)
 from tkinter import filedialog
 
 

@@ -19,7 +19,7 @@ from tts_tools.libtts import (
     GAMEDATA_DEFAULT,
     IllegalSavegameException,
 )
-from tts_tools.util import print_err, strip_mime_parms
+from tts_tools.util import print_err
 
 
 def prefetch_file(
@@ -79,46 +79,60 @@ def prefetch_file(
         # To prevent downloading unexpected content, we check the MIME
         # type in the response.
         if is_obj(path, url):
-            content_expected = lambda mime: any(
-                map(
-                    mime.startswith,
-                    (
-                        "text/plain",
-                        "application/binary",
-                        "application/octet-stream",
-                        "application/json",
-                        "application/x-tgif",
-                    ),
+
+            def content_expected(mime):
+                any(
+                    map(
+                        mime.startswith,
+                        (
+                            "text/plain",
+                            "application/binary",
+                            "application/octet-stream",
+                            "application/json",
+                            "application/x-tgif",
+                        ),
+                    )
                 )
-            )
+
         elif is_assetbundle(path, url):
-            content_expected = lambda mime: any(
-                map(
-                    mime.startswith,
-                    ("application/binary", "application/octet-stream"),
+
+            def content_expected(mime):
+                any(
+                    map(
+                        mime.startswith,
+                        ("application/binary", "application/octet-stream"),
+                    )
                 )
-            )
 
         elif is_image(path, url):
-            content_expected = lambda mime: mime in (
-                "image/jpeg",
-                "image/jpg",
-                "image/png",
-                "application/octet-stream",
-                "application/binary",
-                "video/mp4",
-            )
+
+            def content_expected(mime):
+                mime in (
+                    "image/jpeg",
+                    "image/jpg",
+                    "image/png",
+                    "application/octet-stream",
+                    "application/binary",
+                    "video/mp4",
+                )
+
         elif is_audiolibrary(path, url):
-            content_expected = lambda mime: (
-                mime in ("application/octet-stream", "application/binary")
-                or mime.startswith("audio/")
-            )
+
+            def content_expected(mime):
+                mime in (
+                    "application/octet-stream",
+                    "application/binary",
+                ) or mime.startswith("audio/")
+
         elif is_pdf(path, url):
-            content_expected = lambda mime: mime in (
-                "application/pdf",
-                "application/binary",
-                "application/octet-stream",
-            )
+
+            def content_expected(mime):
+                mime in (
+                    "application/pdf",
+                    "application/binary",
+                    "application/octet-stream",
+                )
+
         else:
             errstr = "Do not know how to retrieve URL {url} at {path}.".format(
                 url=url, path=path
@@ -192,7 +206,7 @@ def prefetch_file(
             raise
 
         # Don’t leave files with partial content lying around.
-        except:
+        except Exception:
             with suppress(FileNotFoundError):
                 os.remove(outfile_name)
             raise
