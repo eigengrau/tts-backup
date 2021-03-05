@@ -40,7 +40,7 @@ setup(
         "tts_tools.prefetch",
         "tts_tools.libgui",
     ],
-    extras_require={"dev": ["pytest==6.2.2", "pytest-black"]},
+    extras_require={"dev": ["pytest==6.2.2", "pytest-black==0.3.12"]},
     package_dir={"": "src"},
     license="GPL3",
     entry_points={
