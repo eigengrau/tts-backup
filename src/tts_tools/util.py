@@ -27,7 +27,7 @@ class ShadowProxy:
         return getattr(self.__target, name)
 
 
-class ZipFile (zipfile.ZipFile):
+class ZipFile(zipfile.ZipFile):
     """A ZipFile that supports dry-runs.
 
     It also keeps track of files already written, and only writes them
@@ -36,10 +36,7 @@ class ZipFile (zipfile.ZipFile):
     file to disk.
     """
 
-    def __init__(self, *args,
-                 dry_run=False,
-                 ignore_missing=False,
-                 **kwargs):
+    def __init__(self, *args, dry_run=False, ignore_missing=False, **kwargs):
 
         self.dry_run = dry_run
         self.stored_files = set()
@@ -87,22 +84,24 @@ class ZipFile (zipfile.ZipFile):
     def put_metadata(self, comment=None):
         """Create a MANIFEST file and store it within the archive."""
 
-        manifest = dict(script_revision=REVISION,
-                        export_date=round(time.time()))
+        manifest = dict(
+            script_revision=REVISION, export_date=round(time.time())
+        )
 
         if comment:
-            manifest['comment'] = comment
+            manifest["comment"] = comment
 
         manifest = json.dumps(manifest)
-        self.comment = manifest.encode('utf-8')
+        self.comment = manifest.encode("utf-8")
 
 
 def print_err(*args, **kwargs):
     # stderr could be reset at run-time, so we need to import it when
     # the function runs, not when this module is imported.
     from sys import stderr
-    if 'file' in kwargs:
-        del kwargs['file']
+
+    if "file" in kwargs:
+        del kwargs["file"]
     print(*args, file=stderr, **kwargs)
 
 

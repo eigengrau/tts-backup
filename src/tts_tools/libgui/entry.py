@@ -2,8 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 
 
-class TextEntry (Frame):
-
+class TextEntry(Frame):
     def __init__(self, master, *args, label, default="", **kwargs):
 
         super().__init__(master, *args, **kwargs)
@@ -20,8 +19,7 @@ class TextEntry (Frame):
         self.entry.pack(side=LEFT, fill=X)
 
 
-class ToggleEntry (Frame):
-
+class ToggleEntry(Frame):
     def __init__(self, master, *args, label, **kwargs):
 
         super().__init__(master, *args, **kwargs)
@@ -34,7 +32,7 @@ class ToggleEntry (Frame):
 
         self.label = Label(self, text=label)
         self.label.pack(anchor=W)
-        self.label.bind('<Button-1>', self.toggle)
+        self.label.bind("<Button-1>", self.toggle)
 
     def toggle(self, *args):
 
@@ -42,16 +40,14 @@ class ToggleEntry (Frame):
         self.var.set(not oldval)
 
 
-class FSEntry (TextEntry):
-
+class FSEntry(TextEntry):
     def __init__(self, *args, initialdir=None, mustexist=False, **kwargs):
 
         super().__init__(*args, **kwargs)
 
-        self.button = Button(self,
-                             text="...",
-                             command=self.ask,
-                             font=font.Font(size=6))
+        self.button = Button(
+            self, text="...", command=self.ask, font=font.Font(size=6)
+        )
         self.button.pack(side=RIGHT)
 
         self.initialdir = initialdir
@@ -62,42 +58,40 @@ class FSEntry (TextEntry):
         raise NotImplementedError
 
 
-class FileEntry (FSEntry):
-
-    def __init__(self,
-                 *args,
-                 filetypes=[],
-                 defaultextension="",
-                 action,
-                 **kwargs):
+class FileEntry(FSEntry):
+    def __init__(
+        self, *args, filetypes=[], defaultextension="", action, **kwargs
+    ):
 
         super().__init__(*args, **kwargs)
         self.defaultextension = defaultextension
         self.filetypes = filetypes
 
-        if action == 'save':
+        if action == "save":
             self.ask_func = filedialog.asksaveasfilename
-        elif action == 'open':
+        elif action == "open":
             self.ask_func = filedialog.askopenfilename
         else:
             raise TypeError("Unknown action type: {}".format(action))
 
     def ask(self):
 
-        filename = self.ask_func(initialdir=self.initialdir,
-                                 filetypes=self.filetypes,
-                                 defaultextension=self.defaultextension)
+        filename = self.ask_func(
+            initialdir=self.initialdir,
+            filetypes=self.filetypes,
+            defaultextension=self.defaultextension,
+        )
         self.var.set(filename)
 
 
-class DirEntry (FSEntry):
-
+class DirEntry(FSEntry):
     def __init__(self, *args, **kwargs):
 
         super().__init__(*args, **kwargs)
 
     def ask(self):
 
-        dirname = filedialog.askdirectory(initialdir=self.initialdir,
-                                          mustexist=self.mustexist)
+        dirname = filedialog.askdirectory(
+            initialdir=self.initialdir, mustexist=self.mustexist
+        )
         self.var.set(dirname)

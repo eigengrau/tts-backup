@@ -10,19 +10,18 @@ AUDIOPATH = os.path.join("Mods", "Audio")
 PDFPATH = os.path.join("Mods", "PDF")
 
 gamedata_map = {
-  'Windows': '~/Documents/My Games/Tabletop Simulator',
-  'Darwin': '~/Library/Tabletop Simulator', # MacOS
-  'Linux': '~/.local/share/Tabletop Simulator',
+    "Windows": "~/Documents/My Games/Tabletop Simulator",
+    "Darwin": "~/Library/Tabletop Simulator",  # MacOS
+    "Linux": "~/.local/share/Tabletop Simulator",
 }
 try:
-  active_platform = platform.system()
-  GAMEDATA_DEFAULT = os.path.expanduser(gamedata_map[active_platform])
+    active_platform = platform.system()
+    GAMEDATA_DEFAULT = os.path.expanduser(gamedata_map[active_platform])
 except KeyError:
-  GAMEDATA_DEFAULT = os.path.expanduser(gamedata_map['Windows'])
+    GAMEDATA_DEFAULT = os.path.expanduser(gamedata_map["Windows"])
 
 
-class IllegalSavegameException (ValueError):
-
+class IllegalSavegameException(ValueError):
     def __init__(self):
         super().__init__("not a Tabletop Simulator savegame")
 
@@ -75,6 +74,7 @@ def seekURL(dic, trail=[]):
 
 # We need checks for whether a URL points to a mesh or an image, so we
 # can do the right thing for each.
+
 
 def is_obj(path, url):
     # TODO: None of my mods have NormalURL set (normal maps?). I’m
@@ -148,14 +148,16 @@ def get_fs_path(path, url):
         return os.path.join(IMGPATH, filename)
 
     else:
-        errstr = ("Do not know how to generate path for "
-                  "URL {url} at {path}.".format(url=url, path=path))
+        errstr = (
+            "Do not know how to generate path for "
+            "URL {url} at {path}.".format(url=url, path=path)
+        )
         raise ValueError(errstr)
 
 
 def urls_from_save(filename):
 
-    with open(filename, 'r', encoding='utf-8') as infile:
+    with open(filename, "r", encoding="utf-8") as infile:
         try:
             save = json.load(infile)
         except UnicodeDecodeError:
@@ -169,6 +171,6 @@ def urls_from_save(filename):
 
 def get_save_name(filename):
 
-    with open(filename, 'r', encoding='utf-8') as infile:
+    with open(filename, "r", encoding="utf-8") as infile:
         save = json.load(infile)
     return save["SaveName"]

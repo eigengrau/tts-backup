@@ -9,48 +9,52 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument(
-    'infile_name',
-    metavar='FILENAME',
-    help="The save file or mod in JSON format."
+    "infile_name",
+    metavar="FILENAME",
+    help="The save file or mod in JSON format.",
 )
 
 parser.add_argument(
     "--gamedata",
-    dest='gamedata_dir',
-    metavar='PATH',
+    dest="gamedata_dir",
+    metavar="PATH",
     default=GAMEDATA_DEFAULT,
-    help="The path to the TTS game data dircetory."
+    help="The path to the TTS game data dircetory.",
 )
 
 parser.add_argument(
-    "--outname", '-o',
-    dest='outfile_name',
-    metavar='FILENAME',
+    "--outname",
+    "-o",
+    dest="outfile_name",
+    metavar="FILENAME",
     default=None,
-    help="The name for the output archive."
+    help="The name for the output archive.",
 )
 
 parser.add_argument(
-    "--dry-run", "-n",
-    dest='dry_run',
+    "--dry-run",
+    "-n",
+    dest="dry_run",
     default=False,
-    action='store_true',
-    help="Only print which files would be backed up."
+    action="store_true",
+    help="Only print which files would be backed up.",
 )
 
 parser.add_argument(
-    "--ignore-missing", "-i",
-    dest='ignore_missing',
+    "--ignore-missing",
+    "-i",
+    dest="ignore_missing",
     default=False,
-    action='store_true',
-    help="Do not abort the backup when files are missing."
+    action="store_true",
+    help="Do not abort the backup when files are missing.",
 )
 
 parser.add_argument(
-    "--comment", "-c",
+    "--comment",
+    "-c",
     dest="comment",
     default="",
-    help="A comment to be stored in the resulting Zip."
+    help="A comment to be stored in the resulting Zip.",
 )
 
 

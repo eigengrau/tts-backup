@@ -2,43 +2,29 @@ import os
 import os.path
 import threading
 import argparse
-from contextlib import (
-    ExitStack,
-    suppress
-)
+from contextlib import ExitStack, suppress
 from tkinter import *
 from tkinter.font import Font
 
-from tts_tools.libgui.entry import (
-    DirEntry,
-    FileEntry,
-    ToggleEntry,
-    TextEntry
-)
-from tts_tools.libgui.frame import (
-    EntryFrame,
-    ButtonFrame,
-    OutputFrame
-)
+from tts_tools.libgui.entry import DirEntry, FileEntry, ToggleEntry, TextEntry
+from tts_tools.libgui.frame import EntryFrame, ButtonFrame, OutputFrame
 from tts_tools import libtts
-from tts_tools.prefetch import (
-    prefetch_files,
-    cli
-)
+from tts_tools.prefetch import prefetch_files, cli
 
 
-class GUI (Frame):
+class GUI(Frame):
 
     argparser = argparse.ArgumentParser(
-        description="Back-up locally cached content "
-                    "from a TTS .json file."
+        description="Back-up locally cached content " "from a TTS .json file."
     )
 
-    argparser.add_argument('infile',
-                           metavar='FILENAME',
-                           default='',
-                           nargs='?',
-                           help="The save file or mod in JSON format.")
+    argparser.add_argument(
+        "infile",
+        metavar="FILENAME",
+        default="",
+        nargs="?",
+        help="The save file or mod in JSON format.",
+    )
 
     def __init__(self, master):
 
@@ -61,44 +47,53 @@ class GUI (Frame):
 
     def make_widgets(self):
 
-        self.label = Label(self,
-                           text="TTS-Prefetch",
-                           font=Font(size=14, weight='bold'))
+        self.label = Label(
+            self, text="TTS-Prefetch", font=Font(size=14, weight="bold")
+        )
         self.label.pack()
 
         leftpane = Frame(self)
-        leftpane.configure(bg='black')
+        leftpane.configure(bg="black")
 
         homedir = os.path.expanduser("~")
         self.settings = EntryFrame(
             leftpane,
-
-            ('infile',   FileEntry, dict(label="Input file",
-                                         initialdir=libtts.GAMEDATA_DEFAULT,
-                                         filetypes=[("JSON-file", "*.json")],
-                                         action='open',
-                                         default=self.args.infile)),
-            ('gamedata', DirEntry,  dict(label="Gamedata path",
-                                         default=libtts.GAMEDATA_DEFAULT,
-                                         initialdir=homedir,
-                                         mustexist=True)),
-
-            ('dry_run',    ToggleEntry, dict(label="Dry run")),
-            ('refetch',    ToggleEntry, dict(label="Refetch")),
-            ('relax',      ToggleEntry, dict(label="Relax")),
-            ('user_agent', TextEntry,   dict(label="User-agent")),
-
+            (
+                "infile",
+                FileEntry,
+                dict(
+                    label="Input file",
+                    initialdir=libtts.GAMEDATA_DEFAULT,
+                    filetypes=[("JSON-file", "*.json")],
+                    action="open",
+                    default=self.args.infile,
+                ),
+            ),
+            (
+                "gamedata",
+                DirEntry,
+                dict(
+                    label="Gamedata path",
+                    default=libtts.GAMEDATA_DEFAULT,
+                    initialdir=homedir,
+                    mustexist=True,
+                ),
+            ),
+            ("dry_run", ToggleEntry, dict(label="Dry run")),
+            ("refetch", ToggleEntry, dict(label="Refetch")),
+            ("relax", ToggleEntry, dict(label="Relax")),
+            ("user_agent", TextEntry, dict(label="User-agent")),
             text="Settings",
-            width=60
+            width=60,
         )
         self.settings.pack(fill=X)
 
         control = LabelFrame(leftpane, text="Control")
-        self.buttons = ButtonFrame(control, 'Run', 'Stop', 'Quit')
+        self.buttons = ButtonFrame(control, "Run", "Stop", "Quit")
         self.buttons.pack()
-        self.buttons.on('Run', self.run)
-        self.buttons.on('Stop', self.stop)
-        self.buttons.on('Quit', self.quit)
+        self.buttons.on("Run", self.run)
+        self.buttons.on("Stop", self.stop)
+        self.buttons.on("Quit", self.quit)
         control.pack(fill=X)
 
         leftpane.pack(side=LEFT, anchor=N)
@@ -131,7 +126,6 @@ class GUI (Frame):
         self.running = thread
 
     def stop(self):
-
         def callback():
 
             if self.running and self.running.is_alive():

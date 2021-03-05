@@ -2,43 +2,29 @@ import os
 import os.path
 import threading
 import argparse
-from contextlib import (
-    ExitStack,
-    suppress
-)
+from contextlib import ExitStack, suppress
 from tkinter import *
 from tkinter.font import Font
 
-from tts_tools.libgui.entry import (
-    DirEntry,
-    FileEntry,
-    TextEntry,
-    ToggleEntry
-)
-from tts_tools.libgui.frame import (
-    EntryFrame,
-    ButtonFrame,
-    OutputFrame
-)
+from tts_tools.libgui.entry import DirEntry, FileEntry, TextEntry, ToggleEntry
+from tts_tools.libgui.frame import EntryFrame, ButtonFrame, OutputFrame
 from tts_tools import libtts
-from tts_tools.backup import (
-    backup_json,
-    cli
-)
+from tts_tools.backup import backup_json, cli
 
 
-class GUI (Frame):
+class GUI(Frame):
 
     argparser = argparse.ArgumentParser(
-        description="Back-up locally cached content "
-                    "from a TTS .json file."
+        description="Back-up locally cached content " "from a TTS .json file."
     )
 
-    argparser.add_argument('infile',
-                           metavar='FILENAME',
-                           default='',
-                           nargs='?',
-                           help="The save file or mod in JSON format.")
+    argparser.add_argument(
+        "infile",
+        metavar="FILENAME",
+        default="",
+        nargs="?",
+        help="The save file or mod in JSON format.",
+    )
 
     def __init__(self, master):
 
@@ -51,9 +37,9 @@ class GUI (Frame):
 
     def make_widgets(self):
 
-        self.label = Label(self,
-                           text="TTS-Backup",
-                           font=Font(size=14, weight='bold'))
+        self.label = Label(
+            self, text="TTS-Backup", font=Font(size=14, weight="bold")
+        )
         self.label.pack()
 
         leftpane = Frame(self)
@@ -61,36 +47,51 @@ class GUI (Frame):
         homedir = os.path.expanduser("~")
         self.settings = EntryFrame(
             leftpane,
-
-            ('infile',   FileEntry, dict(label="Input file",
-                                         initialdir=libtts.GAMEDATA_DEFAULT,
-                                         filetypes=[("JSON-file", "*.json")],
-                                         action='open')),
-            ('gamedata', DirEntry,  dict(label="Gamedata path",
-                                         default=libtts.GAMEDATA_DEFAULT,
-                                         initialdir=homedir,
-                                         mustexist=True)),
-            ('outfile',  FileEntry, dict(label="Output archive",
-                                         initialdir=homedir,
-                                         defaultextension=".zip",
-                                         action='save')),
-            ('comment',  TextEntry, dict(label="Archive comment")),
-
-            ('dry_run',        ToggleEntry, dict(label="Dry run")),
-            ('ignore_missing', ToggleEntry, dict(label="Ignore missing")),
-
+            (
+                "infile",
+                FileEntry,
+                dict(
+                    label="Input file",
+                    initialdir=libtts.GAMEDATA_DEFAULT,
+                    filetypes=[("JSON-file", "*.json")],
+                    action="open",
+                ),
+            ),
+            (
+                "gamedata",
+                DirEntry,
+                dict(
+                    label="Gamedata path",
+                    default=libtts.GAMEDATA_DEFAULT,
+                    initialdir=homedir,
+                    mustexist=True,
+                ),
+            ),
+            (
+                "outfile",
+                FileEntry,
+                dict(
+                    label="Output archive",
+                    initialdir=homedir,
+                    defaultextension=".zip",
+                    action="save",
+                ),
+            ),
+            ("comment", TextEntry, dict(label="Archive comment")),
+            ("dry_run", ToggleEntry, dict(label="Dry run")),
+            ("ignore_missing", ToggleEntry, dict(label="Ignore missing")),
             text="Settings",
-            width=60
+            width=60,
         )
-        self.settings.infile.trace('w', self.on_infile_change)
+        self.settings.infile.trace("w", self.on_infile_change)
         self.settings.infile.set(self.args.infile)
         self.settings.pack(fill=X)
 
         control = LabelFrame(leftpane, text="Control")
-        self.buttons = ButtonFrame(control, 'Run', 'Quit')
+        self.buttons = ButtonFrame(control, "Run", "Quit")
         self.buttons.pack()
-        self.buttons.on('Quit', self.quit)
-        self.buttons.on('Run', self.run)
+        self.buttons.on("Quit", self.quit)
+        self.buttons.on("Run", self.run)
         control.pack(fill=X)
 
         leftpane.pack(side=LEFT, anchor=N)

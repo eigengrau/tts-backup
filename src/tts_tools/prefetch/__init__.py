@@ -17,40 +17,41 @@ from tts_tools.libtts import (
     get_fs_path,
     get_save_name,
     GAMEDATA_DEFAULT,
-    IllegalSavegameException
+    IllegalSavegameException,
 )
-from tts_tools.util import (
-    print_err,
-    strip_mime_parms
-)
+from tts_tools.util import print_err, strip_mime_parms
 
 
-def prefetch_file(filename,
-                  refetch=False,
-                  ignore_content_type=False,
-                  dry_run=False,
-                  gamedata_dir=GAMEDATA_DEFAULT,
-                  timeout=5,
-                  semaphore=None,
-                  user_agent='TTS prefetch'):
+def prefetch_file(
+    filename,
+    refetch=False,
+    ignore_content_type=False,
+    dry_run=False,
+    gamedata_dir=GAMEDATA_DEFAULT,
+    timeout=5,
+    semaphore=None,
+    user_agent="TTS prefetch",
+):
 
     try:
         save_name = get_save_name(filename)
     except Exception:
         save_name = "???"
 
-    print("Prefetching assets for {file} ({save_name}).".format(
-        file=filename,
-        save_name=save_name
-    ))
+    print(
+        "Prefetching assets for {file} ({save_name}).".format(
+            file=filename, save_name=save_name
+        )
+    )
 
     try:
         urls = urls_from_save(filename)
     except (FileNotFoundError, IllegalSavegameException) as error:
-        print_err("Error retrieving URLs from {filename}: {error}".format(
-            error=error,
-            filename=filename
-        ))
+        print_err(
+            "Error retrieving URLs from {filename}: {error}".format(
+                error=error, filename=filename
+            )
+        )
         raise
 
     done = set()
@@ -63,8 +64,10 @@ def prefetch_file(filename,
         # Some mods contain malformed URLs missing a prefix. I’m not
         # sure how TTS deals with these. Let’s assume http for now.
         if not urllib.parse.urlparse(url).scheme:
-            print_err("Warning: URL {url} does not specify a URL scheme. "
-                      "Assuming http.".format(url=url))
+            print_err(
+                "Warning: URL {url} does not specify a URL scheme. "
+                "Assuming http.".format(url=url)
+            )
             fetch_url = "http://" + url
         else:
             fetch_url = url
@@ -76,37 +79,49 @@ def prefetch_file(filename,
         # To prevent downloading unexpected content, we check the MIME
         # type in the response.
         if is_obj(path, url):
-            content_expected = lambda mime: any(map(mime.startswith,
-                                                    ('text/plain',
-                                                     'application/binary',
-                                                     'application/octet-stream',
-                                                     'application/json',
-                                                     'application/x-tgif')))
+            content_expected = lambda mime: any(
+                map(
+                    mime.startswith,
+                    (
+                        "text/plain",
+                        "application/binary",
+                        "application/octet-stream",
+                        "application/json",
+                        "application/x-tgif",
+                    ),
+                )
+            )
         elif is_assetbundle(path, url):
-            content_expected = lambda mime: any(map(mime.startswith,
-                                                    ('application/binary',
-                                                     'application/octet-stream')))
+            content_expected = lambda mime: any(
+                map(
+                    mime.startswith,
+                    ("application/binary", "application/octet-stream"),
+                )
+            )
 
         elif is_image(path, url):
-            content_expected = lambda mime: mime in ('image/jpeg',
-                                                     'image/jpg',
-                                                     'image/png',
-                                                     'application/octet-stream',
-                                                     'application/binary',
-                                                     'video/mp4')
+            content_expected = lambda mime: mime in (
+                "image/jpeg",
+                "image/jpg",
+                "image/png",
+                "application/octet-stream",
+                "application/binary",
+                "video/mp4",
+            )
         elif is_audiolibrary(path, url):
             content_expected = lambda mime: (
-                mime in ('application/octet-stream', 'application/binary')
-                or mime.startswith('audio/')
+                mime in ("application/octet-stream", "application/binary")
+                or mime.startswith("audio/")
             )
         elif is_pdf(path, url):
-            content_expected = lambda mime: mime in ('application/pdf',
-                                                     'application/binary',
-                                                     'application/octet-stream')
+            content_expected = lambda mime: mime in (
+                "application/pdf",
+                "application/binary",
+                "application/octet-stream",
+            )
         else:
             errstr = "Do not know how to retrieve URL {url} at {path}.".format(
-                url=url,
-                path=path
+                url=url, path=path
             )
             raise ValueError(errstr)
 
@@ -124,18 +139,17 @@ def prefetch_file(filename,
             done.add(url)
             continue
 
-        headers = {
-            'User-Agent': user_agent
-        }
+        headers = {"User-Agent": user_agent}
         request = urllib.request.Request(url=fetch_url, headers=headers)
 
         try:
             response = urllib.request.urlopen(request, timeout=timeout)
 
         except urllib.error.HTTPError as error:
-            print_err("Error {code} ({reason})".format(
-                code=error.code,
-                reason=error.reason)
+            print_err(
+                "Error {code} ({reason})".format(
+                    code=error.code, reason=error.reason
+                )
             )
             continue
 
@@ -152,7 +166,7 @@ def prefetch_file(filename,
             continue
 
         # Only for informative purposes.
-        length = response.getheader('Content-Length', 0)
+        length = response.getheader("Content-Length", 0)
         length_kb = "???"
         if length:
             with suppress(ValueError):
@@ -160,7 +174,7 @@ def prefetch_file(filename,
         size_msg = "({length} kb): ".format(length=length_kb)
         print(size_msg, end="", flush=True)
 
-        content_type = response.getheader('Content-Type', '').strip()
+        content_type = response.getheader("Content-Type", "").strip()
         is_expected = not content_type or content_expected(content_type)
         if not (is_expected or ignore_content_type):
             print_err(
@@ -170,7 +184,7 @@ def prefetch_file(filename,
             sys.exit(1)
 
         try:
-            with open(outfile_name, 'wb') as outfile:
+            with open(outfile_name, "wb") as outfile:
                 outfile.write(response.read())
 
         except FileNotFoundError as error:
@@ -187,8 +201,10 @@ def prefetch_file(filename,
             print("ok")
 
         if not is_expected:
-            errmsg = ("Warning: Content type {} did not match "
-                      "expected type.".format(content_type))
+            errmsg = (
+                "Warning: Content type {} did not match "
+                "expected type.".format(content_type)
+            )
             print_err(errmsg)
 
         done.add(url)
@@ -213,7 +229,7 @@ def prefetch_files(args, semaphore=None):
                 gamedata_dir=args.gamedata_dir,
                 timeout=args.timeout,
                 semaphore=semaphore,
-                user_agent=args.user_agent
+                user_agent=args.user_agent,
             )
 
         except (FileNotFoundError, IllegalSavegameException, SystemExit):
