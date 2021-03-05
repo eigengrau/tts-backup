@@ -1,0 +1,8 @@
+---
+repos:
+  - repo: https://github.com/szebenyib/pre-commit-pytest
+    rev: 051fea3
+    hooks:
+      - id: pytest
+        stages:
+          - commit
