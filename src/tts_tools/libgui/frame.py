@@ -1,19 +1,17 @@
-import sys
-from tkinter import (
-    LabelFrame,
-    Frame,
-    Button,
-    LEFT,
-    Scrollbar,
-    BOTH,
-    RIGHT,
-    X,
-    Y,
-    Text,
-    END,
-)
-
+from tkinter import BOTH
+from tkinter import Button
+from tkinter import END
+from tkinter import Frame
+from tkinter import LabelFrame
+from tkinter import LEFT
+from tkinter import RIGHT
+from tkinter import Scrollbar
+from tkinter import Text
+from tkinter import X
+from tkinter import Y
 from tts_tools import util
+
+import sys
 
 
 class EntryFrame(LabelFrame):

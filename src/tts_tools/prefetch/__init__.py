@@ -1,25 +1,23 @@
+from contextlib import suppress
+from tts_tools.libtts import GAMEDATA_DEFAULT
+from tts_tools.libtts import get_fs_path
+from tts_tools.libtts import get_save_name
+from tts_tools.libtts import IllegalSavegameException
+from tts_tools.libtts import is_assetbundle
+from tts_tools.libtts import is_audiolibrary
+from tts_tools.libtts import is_image
+from tts_tools.libtts import is_obj
+from tts_tools.libtts import is_pdf
+from tts_tools.libtts import urls_from_save
+from tts_tools.util import print_err
+
 import http.client
 import os
 import socket
 import sys
-import urllib.request
 import urllib.error
 import urllib.parse
-from contextlib import suppress
-
-from tts_tools.libtts import (
-    urls_from_save,
-    is_obj,
-    is_image,
-    is_assetbundle,
-    is_audiolibrary,
-    is_pdf,
-    get_fs_path,
-    get_save_name,
-    GAMEDATA_DEFAULT,
-    IllegalSavegameException,
-)
-from tts_tools.util import print_err
+import urllib.request
 
 
 def prefetch_file(

@@ -1,15 +1,29 @@
+from contextlib import ExitStack
+from contextlib import suppress
+from tkinter import BOTH
+from tkinter import Frame
+from tkinter import Label
+from tkinter import LabelFrame
+from tkinter import LEFT
+from tkinter import N
+from tkinter import Tk
+from tkinter import X
+from tkinter.font import Font
+from tts_tools import libtts
+from tts_tools.libgui.entry import DirEntry
+from tts_tools.libgui.entry import FileEntry
+from tts_tools.libgui.entry import TextEntry
+from tts_tools.libgui.entry import ToggleEntry
+from tts_tools.libgui.frame import ButtonFrame
+from tts_tools.libgui.frame import EntryFrame
+from tts_tools.libgui.frame import OutputFrame
+from tts_tools.prefetch import cli
+from tts_tools.prefetch import prefetch_files
+
+import argparse
 import os
 import os.path
 import threading
-import argparse
-from contextlib import ExitStack, suppress
-from tkinter import Label, LabelFrame, N, LEFT, BOTH, Tk, X, Frame
-from tkinter.font import Font
-
-from tts_tools.libgui.entry import DirEntry, FileEntry, ToggleEntry, TextEntry
-from tts_tools.libgui.frame import EntryFrame, ButtonFrame, OutputFrame
-from tts_tools import libtts
-from tts_tools.prefetch import prefetch_files, cli
 
 
 class GUI(Frame):

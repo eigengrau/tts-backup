@@ -1,7 +1,8 @@
 import json
-import re
 import os
 import platform
+import re
+
 
 IMGPATH = os.path.join("Mods", "Images")
 OBJPATH = os.path.join("Mods", "Models")

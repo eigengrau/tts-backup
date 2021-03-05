@@ -1,18 +1,16 @@
-from tkinter import (
-    Frame,
-    LEFT,
-    StringVar,
-    Label,
-    BooleanVar,
-    Checkbutton,
-    Button,
-    font,
-    RIGHT,
-    W,
-    Entry,
-    X,
-)
+from tkinter import BooleanVar
+from tkinter import Button
+from tkinter import Checkbutton
+from tkinter import Entry
 from tkinter import filedialog
+from tkinter import font
+from tkinter import Frame
+from tkinter import Label
+from tkinter import LEFT
+from tkinter import RIGHT
+from tkinter import StringVar
+from tkinter import W
+from tkinter import X
 
 
 class TextEntry(Frame):

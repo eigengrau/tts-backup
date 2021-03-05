@@ -1,9 +1,9 @@
-import argparse
-import sys
-import signal
-
 from tts_tools.libtts import GAMEDATA_DEFAULT
 from tts_tools.prefetch import prefetch_files
+
+import argparse
+import signal
+import sys
 
 
 parser = argparse.ArgumentParser(

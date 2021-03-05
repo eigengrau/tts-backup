@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 
-import subprocess
-import shlex
 from setuptools import setup
+
+import shlex
+import subprocess
 
 
 version = "0.1.0.3"
@@ -45,6 +46,8 @@ setup(
             "pytest==6.2.2",
             "pytest-black==0.3.12",
             "pytest-flake8==1.0.7",
+            "pytest-isort==1.3.0",
+            "isort==5.7.0",
         ]
     },
     package_dir={"": "src"},

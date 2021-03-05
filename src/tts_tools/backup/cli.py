@@ -1,7 +1,7 @@
-import argparse
-
-from tts_tools.libtts import GAMEDATA_DEFAULT
 from tts_tools.backup import backup_json
+from tts_tools.libtts import GAMEDATA_DEFAULT
+
+import argparse
 
 
 parser = argparse.ArgumentParser(

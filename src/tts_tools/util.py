@@ -1,8 +1,8 @@
 import json
-import zipfile
 import os
-import time
 import pkg_resources
+import time
+import zipfile
 
 
 REVISION = pkg_resources.require("tts-backup")[0].version
