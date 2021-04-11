@@ -79,7 +79,7 @@ def prefetch_file(
         if is_obj(path, url):
 
             def content_expected(mime):
-                any(
+                return any(
                     map(
                         mime.startswith,
                         (
@@ -95,7 +95,7 @@ def prefetch_file(
         elif is_assetbundle(path, url):
 
             def content_expected(mime):
-                any(
+                return any(
                     map(
                         mime.startswith,
                         ("application/binary", "application/octet-stream"),
@@ -105,7 +105,7 @@ def prefetch_file(
         elif is_image(path, url):
 
             def content_expected(mime):
-                mime in (
+                return mime in (
                     "image/jpeg",
                     "image/jpg",
                     "image/png",
@@ -117,15 +117,19 @@ def prefetch_file(
         elif is_audiolibrary(path, url):
 
             def content_expected(mime):
-                mime in (
-                    "application/octet-stream",
-                    "application/binary",
-                ) or mime.startswith("audio/")
+                return (
+                    mime
+                    in (
+                        "application/octet-stream",
+                        "application/binary",
+                    )
+                    or mime.startswith("audio/")
+                )
 
         elif is_pdf(path, url):
 
             def content_expected(mime):
-                mime in (
+                return mime in (
                     "application/pdf",
                     "application/binary",
                     "application/octet-stream",
