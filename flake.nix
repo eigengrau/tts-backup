@@ -16,7 +16,9 @@
           ];
         };
       in rec {
-        packages = { tts-backup = pkgs.tts-backup; };
-        defaultPackage = packages.tts-backup;
+        packages = rec {
+          default = tts-backup;
+          tts-backup = pkgs.tts-backup;
+        };
       }));
 }
