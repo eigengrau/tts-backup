@@ -20,5 +20,16 @@
           default = tts-backup;
           tts-backup = pkgs.tts-backup;
         };
+        apps = rec {
+          tts-backup = {
+            type = "app";
+            program = "${packages.tts-backup}/bin/tts-backup";
+          };
+          tts-prefetch = {
+            type = "app";
+            program = "${packages.tts-backup}/bin/tts-prefetch";
+          };
+          default = tts-backup;
+        };
       }));
 }
