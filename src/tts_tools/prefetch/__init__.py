@@ -117,14 +117,10 @@ def prefetch_file(
         elif is_audiolibrary(path, url):
 
             def content_expected(mime):
-                return (
-                    mime
-                    in (
-                        "application/octet-stream",
-                        "application/binary",
-                    )
-                    or mime.startswith("audio/")
-                )
+                return mime in (
+                    "application/octet-stream",
+                    "application/binary",
+                ) or mime.startswith("audio/")
 
         elif is_pdf(path, url):
 
