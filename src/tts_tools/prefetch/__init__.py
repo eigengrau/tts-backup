@@ -33,6 +33,11 @@ def prefetch_file(
 
     try:
         save_name = get_save_name(filename)
+        if save_name is None:
+            print("Skipping {filename} likely workshop file info".format(
+                filename=filename
+            ))
+            return
     except Exception:
         save_name = "???"
 
