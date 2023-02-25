@@ -141,13 +141,19 @@ def get_fs_path(path, url):
     elif is_image(path, url):
         # TTS appears to perform some weird heuristics when determining
         # the file suffix. ._.
+        png_filename = recoded_name + ".png"
+        png_fullPath = os.path.join(IMGPATH, png_filename)
+        jpg_filename = recoded_name + ".jpg"
+        jpg_fullPath = os.path.join(IMGPATH, jpg_filename)
+        if os.path.isfile(png_fullPath):
+            return png_fullPath
+        elif os.path.isfile(jpg_fullPath):
+            return jpg_fullPath
+        
         if url.find(".png") > 0:
-            file_suffix = ".png"
+            return png_fullPath
         else:
-            file_suffix = ".jpg"
-        filename = recoded_name + file_suffix
-        return os.path.join(IMGPATH, filename)
-
+            return jpg_fullPath
     else:
         errstr = (
             "Do not know how to generate path for "
